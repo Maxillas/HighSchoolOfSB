@@ -1,0 +1,87 @@
+import unittest
+
+from NativeDictionary import NativeDictionary
+
+class TestOrderedList(unittest.TestCase):
+
+    def test_hash_fun(self):
+        dict1 = NativeDictionary(17)
+
+        self.assertEqual(dict1.hash_fun("a"), 12)
+        self.assertEqual(dict1.hash_fun("b"), 13)
+        self.assertEqual(dict1.hash_fun("c"), 14)
+        self.assertEqual(dict1.hash_fun("d"), 15)
+        self.assertEqual(dict1.hash_fun("e"), 16)
+        self.assertEqual(dict1.hash_fun("f"), 0)
+        self.assertEqual(dict1.hash_fun("g"), 1)
+        self.assertEqual(dict1.hash_fun("h"), 2)
+        self.assertEqual(dict1.hash_fun("i"), 3)
+        self.assertEqual(dict1.hash_fun("j"), 4)
+        self.assertEqual(dict1.hash_fun("k"), 5)
+        self.assertEqual(dict1.hash_fun("l"), 6)
+        self.assertEqual(dict1.hash_fun("m"), 7)
+        self.assertEqual(dict1.hash_fun("n"), 8)
+        self.assertEqual(dict1.hash_fun("o"), 9)
+        self.assertEqual(dict1.hash_fun("p"), 10)
+        self.assertEqual(dict1.hash_fun("q"), 11)
+        self.assertEqual(dict1.hash_fun("aa"), 7)
+        self.assertEqual(dict1.hash_fun("aaa"), 2)
+        self.assertEqual(dict1.hash_fun("w"), 0)
+        self.assertEqual(dict1.hash_fun("wf"), 0)
+        self.assertEqual(dict1.hash_fun("string"), 0)
+
+    def test_all(self):
+        dict = NativeDictionary(17)
+        dict.put("f", "str1")
+        dict.put("w", "str2")
+        dict.put("wf", "str3")
+
+        self.assertEqual(dict.is_key("f"), True)
+        self.assertEqual(dict.is_key("w"), True)
+        self.assertEqual(dict.is_key("wf"), True)
+        self.assertEqual(dict.is_key("g"), False)
+
+        self.assertEqual(dict.slots[0], "str1")
+        self.assertEqual(dict.slots[1], "str2")
+        self.assertEqual(dict.slots[2], "str3")
+
+        dict.put("f", "str4")
+        self.assertEqual(dict.slots[0], "str4")
+        dict.put("w", "str5")
+        self.assertEqual(dict.slots[1], "str5")
+
+        dict.put("a", "str6")
+        self.assertEqual(dict.slots[12], "str6")
+        dict.put("b", "str7")
+        self.assertEqual(dict.slots[13], "str7")
+        dict.put("c", "str8")
+        self.assertEqual(dict.slots[14], "str8")
+        dict.put("d", "str9")
+        self.assertEqual(dict.slots[15], "str9")
+        dict.put("e", "str10")
+        self.assertEqual(dict.slots[16], "str10")
+        dict.put("p", "str11")
+        self.assertEqual(dict.slots[10], "str11")
+        dict.put("q", "str12")
+        self.assertEqual(dict.slots[11], "str12")
+        dict.put("aa", "str13")
+        self.assertEqual(dict.slots[7], "str13")
+        dict.put("aaa", "str14")
+        self.assertEqual(dict.slots[3], "str14")
+        dict.put("string", "str15")
+        self.assertEqual(dict.slots[4], "str15")
+        dict.put("m", "str16")
+        self.assertEqual(dict.slots[8], "str16")
+        dict.put("n", "str17")
+        self.assertEqual(dict.slots[9], "str17")
+        dict.put("o", "str18")
+        self.assertEqual(dict.slots[5], "str18")
+        dict.put("l", "str19")
+        self.assertEqual(dict.slots[6], "str19")
+        dict.put("Hasd", "str19")
+        self.assertEqual(dict.slots[10], "str11")
+
+        self.assertEqual(dict.get("o"), "str18")
+        self.assertEqual(dict.get("m"), "str16")
+        self.assertEqual(dict.get("Hasd"), None)
+
