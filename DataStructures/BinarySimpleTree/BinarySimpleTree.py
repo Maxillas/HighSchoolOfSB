@@ -73,11 +73,11 @@ class BST:
         if FindMax is True:
             if FromNode.RightChild is None:
                 return FromNode
-            FinMinMax(FromNode.RightChild, True)
+            return self.FinMinMax(FromNode.RightChild, True)
         if FindMax is False:
             if FromNode.LeftChild is None:
                 return FromNode
-            FinMinMax(FromNode.LeftChild, True)
+            return self.FinMinMax(FromNode.LeftChild, False)
 
     def DeleteNodeByKey(self, key):
         searchResult = self.FindNodeByKey(key)
@@ -88,16 +88,26 @@ class BST:
             if node.LeftChild is None and node.RightChild is None:
                 return node
             elif node.LeftChild is None and node.RightChild is not None:
-                node.Parent.LeftChild = node.RightChild
+                if node.Parent is not None:
+                    node.Parent.LeftChild = node.RightChild
                 return node
             else:
                 find(node.LeftChild)
 
         insertNode = find(searchResult.Node.RightChild)
-        if searchResult.Node.Parent.LeftChild == searchResult.Node:
-            searchResult.Node.Parent.LeftChild = insertNode
-        elif searchResult.Node.Parent.RightChild == searchResult.Node:
-            searchResult.Node.Parent.RightChildChild = insertNode
+        if searchResult.Node.LeftChild is not None:
+            insertNode.LeftChild = searchResult.Node.LeftChild
+            insertNode.RightChild = searchResult.Node.RightChild
+        if searchResult.Node.Parent is not None:
+            if searchResult.Node.Parent.LeftChild == searchResult.Node:
+                searchResult.Node.Parent.LeftChild = insertNode
+            elif searchResult.Node.Parent.RightChild == searchResult.Node:
+                searchResult.Node.Parent.RightChild = insertNode
+            insertNode.Parent = searchResult.Node.Parent
+        #else:
+            #insertNode.Parent = None
+
+
 
         searchResult.Node.Parent = None
         searchResult.Node.LeftChild = None
