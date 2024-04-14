@@ -127,6 +127,8 @@ class TestBST(unittest.TestCase):
         self.assertEqual(tree.Root.NodeValue, 13)
         self.assertEqual(tree.Root.RightChild.NodeValue, 15)
         self.assertEqual(tree.Root.LeftChild, None)
+        self.assertEqual(tree.Root.Parent, None)
+        self.assertEqual(tree.Root.RightChild.LeftChild, None)
 
         self.assertEqual(tree.Count(), 2)
 
@@ -148,6 +150,9 @@ class TestBST(unittest.TestCase):
 
         tree.DeleteNodeByKey(10)
 
-
+        self.assertEqual(tree.Root.NodeValue, 8)
+        self.assertEqual(tree.Root.RightChild.NodeValue, 9)
+        self.assertEqual(tree.Root.LeftChild.NodeValue, 7)
+        self.assertEqual(tree.Root.Parent, None)
 
 
