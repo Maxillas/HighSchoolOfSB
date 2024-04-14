@@ -190,4 +190,3 @@ class TestBloomFilter(unittest.TestCase):
 
         self.assertEqual(tree.Count(), 7)
         self.assertEqual(tree.LeafCount(), 5)
-
