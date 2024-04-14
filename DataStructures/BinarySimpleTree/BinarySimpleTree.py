@@ -92,8 +92,12 @@ class BST:
                     node.Parent.LeftChild = node.RightChild
                 return node
             else:
-                find(node.LeftChild)
+                return find(node.LeftChild)
 
+        if searchResult.Node.RightChild is None and searchResult.Node.LeftChild is not None:
+            self.Root = searchResult.Node.LeftChild
+            self.Root.Parent = None
+            return 
         insertNode = find(searchResult.Node.RightChild)
         if searchResult.Node.LeftChild is not None:
             insertNode.LeftChild = searchResult.Node.LeftChild
@@ -104,10 +108,10 @@ class BST:
             elif searchResult.Node.Parent.RightChild == searchResult.Node:
                 searchResult.Node.Parent.RightChild = insertNode
             insertNode.Parent = searchResult.Node.Parent
-        #else:
-            #insertNode.Parent = None
-
-
+        else:
+            self.Root = insertNode
+            self.Root.Parent = None
+            self.Root.RightChild = searchResult.Node.RightChild
 
         searchResult.Node.Parent = None
         searchResult.Node.LeftChild = None

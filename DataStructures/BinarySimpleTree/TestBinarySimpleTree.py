@@ -103,14 +103,14 @@ class TestBST(unittest.TestCase):
         tree.AddKeyValue(node4.NodeKey, node4.NodeValue)
         tree.AddKeyValue(node5.NodeKey, node5.NodeValue)
 
-        self.assertEqual(nodeRoot.RightChild.NodeValue, 20)
-        self.assertEqual(nodeRoot.RightChild.RightChild.NodeValue, 30)
+        self.assertEqual(tree.Root.RightChild.NodeValue, 20)
+        self.assertEqual(tree.Root.RightChild.RightChild.NodeValue, 30)
         self.assertEqual(tree.Count(), 6)
 
         tree.DeleteNodeByKey(20)
 
-        self.assertEqual(nodeRoot.RightChild.NodeValue, 30)
-        self.assertEqual(nodeRoot.RightChild.LeftChild.NodeValue, 18)
+        self.assertEqual(tree.Root.RightChild.NodeValue, 30)
+        self.assertEqual(tree.Root.RightChild.LeftChild.NodeValue, 18)
         self.assertEqual(tree.Count(), 5)
 
     def test_DeleteNodeByKeyRoot(self):
@@ -122,12 +122,32 @@ class TestBST(unittest.TestCase):
         tree.AddKeyValue(node1.NodeKey, node1.NodeValue)
         tree.AddKeyValue(node2.NodeKey, node2.NodeValue)
 
-        self.assertEqual(nodeRoot.RightChild.NodeValue, node1.NodeValue)
-        self.assertEqual(nodeRoot.RightChild.LeftChild.NodeValue, node2.NodeValue)
+        tree.DeleteNodeByKey(10)
 
+        self.assertEqual(tree.Root.NodeValue, 13)
+        self.assertEqual(tree.Root.RightChild.NodeValue, 15)
+        self.assertEqual(tree.Root.LeftChild, None)
 
-        self.assertEqual(tree.Count(), 3)
+        self.assertEqual(tree.Count(), 2)
+
+    def test_DeleteNodeByKeyRoot2(self):
+        nodeRoot = BSTNode(10, 10, None)
+        tree = BST(nodeRoot)
+
+        tree.AddKeyValue(8, 8)
+        tree.AddKeyValue(9, 9)
+        tree.AddKeyValue(7, 7)
+
+        self.assertEqual(tree.Root.NodeValue, 10)
+        self.assertEqual(tree.Root.RightChild, None)
+        self.assertEqual(tree.Root.LeftChild.NodeValue, 8)
+        self.assertEqual(tree.Root.LeftChild.LeftChild.NodeValue, 7)
+        self.assertEqual(tree.Root.LeftChild.RightChild.NodeValue, 9)
+
+        self.assertEqual(tree.Count(), 4)
 
         tree.DeleteNodeByKey(10)
+
+
 
 
