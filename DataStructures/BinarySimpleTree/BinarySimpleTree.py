@@ -55,9 +55,13 @@ class BST:
 
     def AddKeyValue(self, key, val):
         searchResult = self.FindNodeByKey(key)
-        if searchResult.NodeHasKey is True or searchResult.Node is None:
+        if searchResult.NodeHasKey is True:
             return False
         node = BSTNode(key, val, None)
+        if searchResult.Node is None:
+            self.Root = node
+            self.NodeCount += 1
+            return
         if searchResult.ToLeft is True:
             searchResult.Node.LeftChild = node
             node.Parent = searchResult.Node
@@ -79,17 +83,37 @@ class BST:
                 return FromNode
             return self.FinMinMax(FromNode.LeftChild, False)
 
+    def __get_all_nodes(self, node: BSTNode) -> list:
+        '''
+        Приватный метод рекурсивно проходит по дереву и
+        возвращает список всех узлов.
+        '''
+        nodes = []
+        nodes.append(node)
+        if node.LeftChild:
+            nodes += self.__get_all_nodes(node.LeftChild)
+        if node.RightChild:
+            nodes += self.__get_all_nodes(node.RightChild)
+        return nodes
+
+    def GetAllNodes(self) -> list:
+        if not self.Root:
+            return []
+        return self.__get_all_nodes(self.Root)
+
     def DeleteNodeByKey(self, key):
         searchResult = self.FindNodeByKey(key)
         if searchResult.NodeHasKey is False:
             return False
 
         def find(node):
+            if node is None:
+                return None
             if node.LeftChild is None and node.RightChild is None:
                 return node
             elif node.LeftChild is None and node.RightChild is not None:
-                if node.Parent is not None:
-                    node.Parent.LeftChild = node.RightChild
+                #if node.Parent is not None:
+                    #node.Parent.LeftChild = node.RightChild
                 return node
             else:
                 return find(node.LeftChild)
@@ -97,27 +121,61 @@ class BST:
         if searchResult.Node.RightChild is None and searchResult.Node.LeftChild is not None:
             self.Root = searchResult.Node.LeftChild
             self.Root.Parent = None
-            return
+            self.NodeCount -= 1
+            return True
         insertNode = find(searchResult.Node.RightChild)
+        if insertNode is None:
+            searchResult.Node.Parent.LeftChild = None
+            searchResult.Node.Parent = None
+            self.NodeCount -= 1
+            return True
         if searchResult.Node.LeftChild is not None:
-            insertNode.LeftChild = searchResult.Node.LeftChild
-            insertNode.RightChild = searchResult.Node.RightChild
+            #insertNode.LeftChild = searchResult.Node.LeftChild
+            searchResult.Node.LeftChild.Parent = insertNode
         if searchResult.Node.Parent is not None:
             if searchResult.Node.Parent.LeftChild == searchResult.Node:
                 searchResult.Node.Parent.LeftChild = insertNode
             elif searchResult.Node.Parent.RightChild == searchResult.Node:
                 searchResult.Node.Parent.RightChild = insertNode
             insertNode.Parent = searchResult.Node.Parent
+            if insertNode == searchResult.Node.RightChild:
+                insertNode.LeftChild = searchResult.Node.LeftChild
+                
         else:
-            insertNode.Parent.LeftChild = None
+
             self.Root = insertNode
-            self.Root.Parent = None
+            if insertNode == insertNode.Parent.LeftChild:
+                if insertNode.LeftChild is not None:
+                    insertNode.Parent.LeftChild = insertNode.LeftChild
+                    insertNode.LeftChild.Parent = insertNode.Parent
+                elif insertNode.RightChild is not None:
+                    insertNode.Parent.LeftChild  = insertNode.RightChild
+                    insertNode.RightChild.Parent = insertNode.Parent
+                else:
+                    insertNode.Parent.LeftChild = None
+            elif insertNode == insertNode.Parent.RightChild:
+                insertNode.LeftChild = searchResult.Node.LeftChild
+                searchResult.Node.Parent = None
+                searchResult.Node.LeftChild = None
+                searchResult.Node.RightChild = None
+                self.Root.Parent = None
+                self.NodeCount -= 1
+                return True
+            self.Root.LeftChild = searchResult.Node.LeftChild
+            self.Root.LeftChild.Parent = insertNode
             self.Root.RightChild = searchResult.Node.RightChild
+            self.Root.RightChild.Parent = insertNode
+            self.Root.Parent = None
+            #insertNode.Parent.LeftChild = None
+            #insertNode.Parent.RightChild = None
+
+
 
         searchResult.Node.Parent = None
         searchResult.Node.LeftChild = None
         searchResult.Node.RightChild = None
         self.NodeCount -= 1
+        return True
 
     def Count(self):
         return self.NodeCount
