@@ -309,5 +309,104 @@ class TestBST(unittest.TestCase):
             tree.Root.RightChild.LeftChild.Parent.NodeKey, 100
         )
 
+    def test_WideAllNodes(self):
+        tree = BST(None)
+        tree.AddKeyValue(50, 1)
+        self.assertEqual(tree.Root.NodeKey, 50)
+        tree.AddKeyValue(25, 2)
+        tree.AddKeyValue(75, 2)
+        tree.AddKeyValue(100, 3)
+        tree.AddKeyValue(120, 4)
+        tree.AddKeyValue(60, 3)
+        tree.AddKeyValue(65, 4)
+        all_nodes = tree.WideAllNodes()
+        
+        self.assertEqual(tree.Count(), len(all_nodes))
 
+        
+    def test_DeepAllNodesInOrder(self):
+        tree = BST(None)
+        tree.AddKeyValue(50, 1)
+        self.assertEqual(tree.Root.NodeKey, 50)
+        tree.AddKeyValue(25, 2)
+        tree.AddKeyValue(75, 2)
+        tree.AddKeyValue(100, 3)
+        tree.AddKeyValue(120, 4)
+        tree.AddKeyValue(60, 3)
+        tree.AddKeyValue(65, 4)
+        all_nodes = tree.DeepAllNodes(0)
+               
+        self.assertEqual(tree.Count(), len(all_nodes))
 
+        self.assertEqual(all_nodes[0].NodeKey, 25)
+        self.assertEqual(all_nodes[1].NodeKey, 50)
+        self.assertEqual(all_nodes[2].NodeKey, 60)
+        self.assertEqual(all_nodes[3].NodeKey, 65)
+        self.assertEqual(all_nodes[4].NodeKey, 75)
+        self.assertEqual(all_nodes[5].NodeKey, 100)
+        self.assertEqual(all_nodes[6].NodeKey, 120)
+
+    def test_DeepAllNodesPostOrder(self):
+        tree = BST(None)
+        tree.AddKeyValue(50, 1)
+        self.assertEqual(tree.Root.NodeKey, 50)
+        tree.AddKeyValue(25, 2)
+        tree.AddKeyValue(75, 2)
+        tree.AddKeyValue(100, 3)
+        tree.AddKeyValue(120, 4)
+        tree.AddKeyValue(60, 3)
+        tree.AddKeyValue(65, 4)
+        all_nodes = tree.DeepAllNodes(1)
+               
+        self.assertEqual(tree.Count(), len(all_nodes))
+        
+        self.assertEqual(all_nodes[0].NodeKey, 25)
+        self.assertEqual(all_nodes[1].NodeKey, 65)
+        self.assertEqual(all_nodes[2].NodeKey, 60)
+        self.assertEqual(all_nodes[3].NodeKey, 120)
+        self.assertEqual(all_nodes[4].NodeKey, 100)
+        self.assertEqual(all_nodes[5].NodeKey, 75)
+        self.assertEqual(all_nodes[6].NodeKey, 50)
+        
+    def test_DeepAllNodesPostOrder(self):
+        tree = BST(None)
+        tree.AddKeyValue(50, 1)
+        self.assertEqual(tree.Root.NodeKey, 50)
+        tree.AddKeyValue(25, 2)
+        tree.AddKeyValue(75, 2)
+        tree.AddKeyValue(100, 3)
+        tree.AddKeyValue(120, 4)
+        tree.AddKeyValue(60, 3)
+        tree.AddKeyValue(65, 4)
+        all_nodes = tree.DeepAllNodes(2)
+               
+        self.assertEqual(tree.Count(), len(all_nodes))
+        
+        self.assertEqual(all_nodes[0].NodeKey, 50)
+        self.assertEqual(all_nodes[1].NodeKey, 25)
+        self.assertEqual(all_nodes[2].NodeKey, 75)
+        self.assertEqual(all_nodes[3].NodeKey, 60)
+        self.assertEqual(all_nodes[4].NodeKey, 65)
+        self.assertEqual(all_nodes[5].NodeKey, 100)
+        self.assertEqual(all_nodes[6].NodeKey, 120)
+    
+    def test_inversion(self):
+        tree = BST(None)
+        tree.AddKeyValue(50, 1)
+        self.assertEqual(tree.Root.NodeKey, 50)
+        tree.AddKeyValue(25, 2)
+        tree.AddKeyValue(75, 2)
+        tree.AddKeyValue(100, 3)
+        tree.AddKeyValue(120, 4)
+        tree.AddKeyValue(60, 3)
+        tree.AddKeyValue(65, 4)
+
+        self.assertEqual(tree.Root.NodeKey, 50)
+        self.assertEqual(tree.Root.LeftChild.NodeKey, 25)
+
+        # inversionTree = tree.Inversion()
+        # self.assertEqual(inversionTree.Root.NodeKey, 50)
+        # self.assertEqual(inversionTree.Root.RightChild.NodeKey, 25)
+        # self.assertEqual(inversionTree.Root.LeftChild.NodeKey, 75)
+        
+        

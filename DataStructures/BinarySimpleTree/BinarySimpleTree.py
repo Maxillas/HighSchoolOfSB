@@ -74,6 +74,8 @@ class BST:
             return
 
     def FinMinMax(self, FromNode, FindMax):
+        if self.Root is None:
+            return None
         if FindMax is True:
             if FromNode.RightChild is None:
                 return FromNode
@@ -101,81 +103,146 @@ class BST:
             return []
         return self.__get_all_nodes(self.Root)
 
-    def DeleteNodeByKey(self, key):
-        searchResult = self.FindNodeByKey(key)
-        if searchResult.NodeHasKey is False:
-            return False
-
-        def find(node):
-            if node is None:
-                return None
-            if node.LeftChild is None and node.RightChild is None:
-                return node
-            elif node.LeftChild is None and node.RightChild is not None:
-                #if node.Parent is not None:
-                    #node.Parent.LeftChild = node.RightChild
-                return node
-            else:
-                return find(node.LeftChild)
-
-        if searchResult.Node.RightChild is None and searchResult.Node.LeftChild is not None:
-            self.Root = searchResult.Node.LeftChild
-            self.Root.Parent = None
-            self.NodeCount -= 1
+    def isLeaf(self, node):
+        if node.LeftChild is None and node.RightChild is None:
             return True
-        insertNode = find(searchResult.Node.RightChild)
-        if insertNode is None:
-            searchResult.Node.Parent.LeftChild = None
-            searchResult.Node.Parent = None
-            self.NodeCount -= 1
-            return True
-        if searchResult.Node.LeftChild is not None:
-            #insertNode.LeftChild = searchResult.Node.LeftChild
-            searchResult.Node.LeftChild.Parent = insertNode
-        if searchResult.Node.Parent is not None:
-            if searchResult.Node.Parent.LeftChild == searchResult.Node:
-                searchResult.Node.Parent.LeftChild = insertNode
-            elif searchResult.Node.Parent.RightChild == searchResult.Node:
-                searchResult.Node.Parent.RightChild = insertNode
-            insertNode.Parent = searchResult.Node.Parent
-            if insertNode == searchResult.Node.RightChild:
-                insertNode.LeftChild = searchResult.Node.LeftChild
-                
+        return False
+    
+    def __insertLeftRight(self, nodeDelete, nodeSuccessor):
+        if nodeDelete.NodeKey < nodeDelete.Parent.NodeKey:
+            nodeDelete.Parent.LeftChild = nodeSuccessor
         else:
+            nodeDelete.Parent.RightChild = nodeSuccessor
 
-            self.Root = insertNode
-            if insertNode == insertNode.Parent.LeftChild:
-                if insertNode.LeftChild is not None:
-                    insertNode.Parent.LeftChild = insertNode.LeftChild
-                    insertNode.LeftChild.Parent = insertNode.Parent
-                elif insertNode.RightChild is not None:
-                    insertNode.Parent.LeftChild  = insertNode.RightChild
-                    insertNode.RightChild.Parent = insertNode.Parent
-                else:
-                    insertNode.Parent.LeftChild = None
-            elif insertNode == insertNode.Parent.RightChild:
-                insertNode.LeftChild = searchResult.Node.LeftChild
-                searchResult.Node.Parent = None
-                searchResult.Node.LeftChild = None
-                searchResult.Node.RightChild = None
-                self.Root.Parent = None
-                self.NodeCount -= 1
-                return True
-            self.Root.LeftChild = searchResult.Node.LeftChild
-            self.Root.LeftChild.Parent = insertNode
-            self.Root.RightChild = searchResult.Node.RightChild
-            self.Root.RightChild.Parent = insertNode
+    def __insert(self, nodeDelete, nodeSuccessor):
+        if nodeDelete == self.Root:
+            self.Root = nodeSuccessor
             self.Root.Parent = None
-            #insertNode.Parent.LeftChild = None
-            #insertNode.Parent.RightChild = None
+        else:
+            self.__insertLeftRight(nodeDelete, nodeSuccessor)
+            nodeSuccessor.Parent = nodeDelete.Parent
+        nodeSuccessor.LeftChild = nodeDelete.LeftChild
+        nodeSuccessor.RightChild = nodeDelete.RightChild
 
+    
+    def DeleteNodeByKey(self, key):
+        deletedNodeSearch = self.FindNodeByKey(key)
+        deletedNode = deletedNodeSearch.Node
+        # если нет такого значения в дереве
+        if deletedNodeSearch.NodeHasKey is False:
+            return False
+        # если в дереве только один узел
+        if self.isLeaf(deletedNode) is True and deletedNode.Parent is None:
+            self.Root = None
+            self.NodeCount -= 1
+            return True
+        # если удаляем листок
+        if self.isLeaf(deletedNode) is True:
+            self.__insertLeftRight(deletedNode, None)
+            self.NodeCount -= 1
+            return True
+        
+        if deletedNode.RightChild is None and deletedNode.Parent is None:
+            self.Root = deletedNode.LeftChild
+            self.Root.Parent = None
+            self.NodeCount -= 1
+            return True
+        insertNode = self.FinMinMax(deletedNode.RightChild, False)
 
-
-        searchResult.Node.Parent = None
-        searchResult.Node.LeftChild = None
-        searchResult.Node.RightChild = None
+        # если у преемника нет потомков и родитель является удаляемым узлом
+        if insertNode.Parent == deletedNode and self.isLeaf(insertNode):
+            insertNode.Parent.RightChild = None
+            deletedNode.LeftChild.Parent = insertNode
+            self.__insert(deletedNode, insertNode)
+        # если у преемника нет потомков
+        elif insertNode.Parent == deletedNode and not self.isLeaf(insertNode):
+            insertNode.Parent.RightChild = insertNode.RightChild
+            deletedNode.LeftChild.Parent = insertNode
+            self.__insert(deletedNode, insertNode) 
+        # если у преемника есть только правый потомок и родитель является удаляемым узлом
+        elif self.isLeaf(insertNode):
+            insertNode.Parent.LeftChild = None
+            deletedNode.RightChild.Parent = insertNode
+            deletedNode.LeftChild.Parent = insertNode
+            self.__insert(deletedNode, insertNode)
+        # если у преемника есть только правый потомок
+        elif not self.isLeaf(insertNode):
+            deletedNode.LeftChild.Parent = insertNode
+            deletedNode.RightChild.Parent = insertNode
+            insertNode.Parent.LeftChild = insertNode.RightChild
+            insertNode.RightChild.Parent = insertNode.Parent
+            self.__insert(deletedNode, insertNode)
         self.NodeCount -= 1
         return True
-
+        
     def Count(self):
         return self.NodeCount
+    
+    def WideAllNodes(self):
+        outputList = []        
+        def findNode(node):
+            outputList.append(node)
+            if node.LeftChild is None and node.RightChild is None:
+                return
+            if node.LeftChild is not None:
+                findNode(node.LeftChild)
+            if node.RightChild is not None:
+                findNode(node.RightChild)
+        findNode(self.Root)
+        return outputList
+    
+    def DeepAllNodes(self, typeOfOrder):
+        outputList = []
+        node = self.Root
+
+        def inOrderSearch(node):
+            if node.LeftChild is not None:
+                inOrderSearch(node.LeftChild)
+            outputList.append(node)
+            if node.RightChild is not None:
+                inOrderSearch(node.RightChild)
+        
+        def postOrderSearch(node):
+            if node.LeftChild is not None:
+                postOrderSearch(node.LeftChild)
+            if node.RightChild is not None:
+                postOrderSearch(node.RightChild)
+            outputList.append(node)
+
+        def preOrderSearch(node):
+            outputList.append(node)
+            if node.LeftChild is not None:
+                preOrderSearch(node.LeftChild)
+            if node.RightChild is not None:
+                preOrderSearch(node.RightChild)
+            
+        if typeOfOrder == 0:
+            inOrderSearch(node)
+            return outputList
+        if typeOfOrder == 1:
+            postOrderSearch(node)
+            return outputList
+        if typeOfOrder == 2:
+            preOrderSearch(node)
+            return outputList
+
+#    def Inversion(self):
+        # tree = self
+        # node = self.Root
+        
+        # def invers(node):
+        #     #print("YAHA", node.NodeKey)
+        #     node.LeftChild, node.RightChild = node.RightChild, node.LeftChild
+
+        # def postOrderSearch(node):
+        #     #print("gg", node.NodeKey)
+        #     if node.LeftChild is not None:
+        #         postOrderSearch(node.LeftChild)
+        #     if node.RightChild is not None:
+        #         postOrderSearch(node.RightChild)
+        #     invers(node.Parent)
+
+        # postOrderSearch(node)
+       
+        # return tree
+        
