@@ -1,10 +1,11 @@
 import unittest
 from BinarySimpleTree import BSTNode
+from BinarySimpleTree import BSTFind
 from BinarySimpleTree import BST
 
 
 class TestBST(unittest.TestCase):
-
+    
     def test_FindNodeByKey(self):
         nodeRoot = BSTNode(16, 16, None)
         node1 = BSTNode(15, 15, None)
@@ -64,6 +65,80 @@ class TestBST(unittest.TestCase):
         self.assertEqual(tree.Root.LeftChild.NodeValue, 15)
         self.assertEqual(tree.Root.RightChild.NodeValue, 20)
 
+    def test_node(self):
+        node = BSTNode(key=1, val=1, parent=None)
+        self.assertIsInstance(node, BSTNode)
+        self.assertEqual(node.NodeKey, 1)
+        self.assertEqual(node.NodeValue, 1)
+        self.assertIsNone(node.Parent)
+
+    def test_find_node(self):
+        tree = BST(None)
+        # нет ни одного узла
+        search_result = tree.FindNodeByKey(1)
+        self.assertIsInstance(search_result, BSTFind)
+        self.assertIsNone(search_result.Node)
+        self.assertFalse(search_result.ToLeft)
+        self.assertFalse(search_result.NodeHasKey)
+        # добавили корень
+        tree.AddKeyValue(10, 1)
+        self.assertEqual(tree.Root.NodeKey, 10)
+        # запрошенный ключ добавляем левому потомку
+        search_result = tree.FindNodeByKey(8)
+        self.assertEqual(search_result.Node.NodeKey, 10)
+        self.assertTrue(search_result.ToLeft)
+        self.assertFalse(search_result.NodeHasKey)
+        # запрошенный ключ добавляем правому потомку
+        search_result = tree.FindNodeByKey(12)
+        self.assertEqual(search_result.Node.NodeKey, 10)
+        self.assertFalse(search_result.ToLeft)
+        self.assertFalse(search_result.NodeHasKey)
+        tree.AddKeyValue(8, 1)
+        # проверяем поиск присутствующего ключа
+        search_result = tree.FindNodeByKey(8)
+        self.assertEqual(search_result.Node.NodeKey, 8)
+        self.assertFalse(search_result.ToLeft)
+        self.assertTrue(search_result.NodeHasKey)
+        self.assertEqual(tree.Root.LeftChild.NodeKey, 8)
+
+    def test_add_root_node(self):
+        tree = BST(None)
+        self.assertIsNone(tree.FindNodeByKey(10).Node)
+        self.assertTrue(tree.AddKeyValue(10, 1))
+        self.assertIsNotNone(tree.FindNodeByKey(10).Node)
+        self.assertIsInstance(tree.Root, BSTNode)
+        self.assertEqual(tree.Root.NodeKey, 10)
+        self.assertEqual(tree.Root.NodeValue, 1)
+        self.assertIsNone(tree.Root.Parent)
+        self.assertIsNone(tree.Root.LeftChild)
+        self.assertIsNone(tree.Root.RightChild)
+
+    def test_add_many_nodes(self):
+        tree = BST(None)
+        self.assertIsNone(tree.FindNodeByKey(10).Node)
+        self.assertIsNone(tree.FindNodeByKey(8).Node)
+        self.assertIsNone(tree.FindNodeByKey(12).Node)
+        self.assertTrue(tree.AddKeyValue(10, 1))
+        self.assertTrue(tree.AddKeyValue(8, 2))
+        self.assertTrue(tree.AddKeyValue(12, 3))
+        self.assertIsNotNone(tree.FindNodeByKey(10).Node)
+        self.assertIsNotNone(tree.FindNodeByKey(8).Node)
+        self.assertIsNotNone(tree.FindNodeByKey(12).Node)
+        self.assertIsNone(tree.Root.Parent)
+        self.assertIsInstance(tree.Root.LeftChild, BSTNode)
+        self.assertIsInstance(tree.Root.RightChild, BSTNode)
+        self.assertLess(
+            tree.Root.LeftChild.NodeKey, tree.Root.NodeKey
+        )
+        self.assertGreater(
+            tree.Root.RightChild.NodeKey, tree.Root.NodeKey
+        )
+        self.assertEqual(
+            tree.Root.LeftChild.Parent.NodeKey, tree.Root.NodeKey
+        )
+        self.assertEqual(
+            tree.Root.RightChild.Parent.NodeKey, tree.Root.NodeKey
+        )
     def test_FinMinMax(self):
         nodeRoot = BSTNode(16, 16, None)
         node1 = BSTNode(15, 15, None)

@@ -61,17 +61,17 @@ class BST:
         if searchResult.Node is None:
             self.Root = node
             self.NodeCount += 1
-            return
+            return True
         if searchResult.ToLeft is True:
             searchResult.Node.LeftChild = node
             node.Parent = searchResult.Node
             self.NodeCount += 1
-            return
+            return True
         if searchResult.ToLeft is False:
             searchResult.Node.RightChild = node
             node.Parent = searchResult.Node
             self.NodeCount += 1
-            return
+            return True
 
     def FinMinMax(self, FromNode, FindMax):
         if self.Root is None:
