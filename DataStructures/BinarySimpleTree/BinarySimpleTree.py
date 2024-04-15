@@ -161,7 +161,9 @@ class BST:
         return self.NodeCount
     
     def WideAllNodes(self):
-        outputList = []        
+        outputList = []       
+        if self.Root is None:
+            return () 
         def findNode(node):
             outputList.append(node)
             if node.LeftChild is None and node.RightChild is None:
@@ -171,12 +173,14 @@ class BST:
             if node.RightChild is not None:
                 findNode(node.RightChild)
         findNode(self.Root)
-        return outputList
+        return tuple(outputList)
     
     def DeepAllNodes(self, typeOfOrder):
         outputList = []
         node = self.Root
-
+        if self.Root is None:
+            return ()
+        
         def inOrderSearch(node):
             if node.LeftChild is not None:
                 inOrderSearch(node.LeftChild)
@@ -200,13 +204,13 @@ class BST:
             
         if typeOfOrder == 0:
             inOrderSearch(node)
-            return outputList
+            return tuple(outputList)
         if typeOfOrder == 1:
             postOrderSearch(node)
-            return outputList
+            return tuple(outputList)
         if typeOfOrder == 2:
             preOrderSearch(node)
-            return outputList
+            return tuple(outputList)
 
 #    def Inversion(self):
         # tree = self
