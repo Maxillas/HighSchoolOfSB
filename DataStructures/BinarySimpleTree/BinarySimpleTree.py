@@ -85,24 +85,6 @@ class BST:
                 return FromNode
             return self.FinMinMax(FromNode.LeftChild, False)
 
-    def __get_all_nodes(self, node: BSTNode) -> list:
-        '''
-        Приватный метод рекурсивно проходит по дереву и
-        возвращает список всех узлов.
-        '''
-        nodes = []
-        nodes.append(node)
-        if node.LeftChild:
-            nodes += self.__get_all_nodes(node.LeftChild)
-        if node.RightChild:
-            nodes += self.__get_all_nodes(node.RightChild)
-        return nodes
-
-    def GetAllNodes(self) -> list:
-        if not self.Root:
-            return []
-        return self.__get_all_nodes(self.Root)
-
     def isLeaf(self, node):
         if node.LeftChild is None and node.RightChild is None:
             return True
