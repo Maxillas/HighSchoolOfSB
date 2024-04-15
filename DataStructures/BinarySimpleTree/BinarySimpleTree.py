@@ -164,15 +164,19 @@ class BST:
         outputList = []       
         if self.Root is None:
             return () 
-        def findNode(node):
-            outputList.append(node)
-            if node.LeftChild is None and node.RightChild is None:
-                return
-            if node.LeftChild is not None:
-                findNode(node.LeftChild)
-            if node.RightChild is not None:
-                findNode(node.RightChild)
-        findNode(self.Root)
+        node = self.Root
+        childrens = [node]
+
+        while childrens:
+            childrensCurrent = []
+            for item in childrens:
+                outputList.append(item)
+                if item.LeftChild:
+                    childrensCurrent += [item.LeftChild]
+                if item.RightChild:
+                    childrensCurrent += [item.RightChild]
+            childrens = childrensCurrent
+
         return tuple(outputList)
     
     def DeepAllNodes(self, typeOfOrder):

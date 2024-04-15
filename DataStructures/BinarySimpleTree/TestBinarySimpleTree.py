@@ -376,9 +376,24 @@ class TestBST(unittest.TestCase):
         tree.AddKeyValue(60, 3)
         tree.AddKeyValue(65, 4)
         all_nodes = tree.WideAllNodes()
+        for i in all_nodes:
+            print(i.NodeKey)
         
         self.assertEqual(tree.Count(), len(all_nodes))
 
+    def test_wide_all_nodes_in_empty_tree(self):
+        tree = BST(None)
+        all_nodes = tree.WideAllNodes()
+        self.assertIsInstance(all_nodes, tuple)
+        self.assertEqual(len(all_nodes), 0)
+
+    def test_wide_all_nodes_only_root_node(self):
+        tree = BST(None)
+        tree.AddKeyValue(10, 1)
+        all_nodes = tree.WideAllNodes()
+        self.assertIsInstance(all_nodes, tuple)
+        self.assertIsInstance(all_nodes[0], BSTNode)
+        self.assertEqual(len(all_nodes), 1)
         
     def test_DeepAllNodesInOrder(self):
         tree = BST(None)
@@ -464,5 +479,7 @@ class TestBST(unittest.TestCase):
         # self.assertEqual(inversionTree.Root.NodeKey, 50)
         # self.assertEqual(inversionTree.Root.RightChild.NodeKey, 25)
         # self.assertEqual(inversionTree.Root.LeftChild.NodeKey, 75)
-        
-        
+
+
+if __name__ == '__main__':
+    unittest.main()
