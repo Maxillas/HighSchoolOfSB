@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b3d9a39d-0eb6-4e05-b854-4c28c8d1d840" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/BinarySimpleTree.py" beforeDir="false" afterPath="$PROJECT_DIR$/BinarySimpleTree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestBinarySimpleTree.py" beforeDir="false" afterPath="$PROJECT_DIR$/TestBinarySimpleTree.py" afterDir="false" />
-    </list>
+    <list default="true" id="b3d9a39d-0eb6-4e05-b854-4c28c8d1d840" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,7 +20,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../BinarySimpleTreeArrayBalancedGen" />
   </component>
   <component name="RunManager">
     <configuration name="TestBinarySimpleTree" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -67,6 +64,7 @@
       <workItem from="1713184291407" duration="26000" />
       <workItem from="1713184318600" duration="112000" />
       <workItem from="1713184432288" duration="1751000" />
+      <workItem from="1713362809449" duration="10000" />
     </task>
     <servers />
   </component>
@@ -78,10 +76,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="669" y="115" key="#TestBinarySimpleTree/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1713184344795" />
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1713184424010">
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1713362821054">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1713184424010" />
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1713362821054" />
     <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1713186183970">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
