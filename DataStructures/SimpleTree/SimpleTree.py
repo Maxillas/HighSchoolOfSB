@@ -59,3 +59,20 @@ class SimpleTree:
             if len(item.Children) == 0:
                 count += 1
         return count
+    
+    def findPath(self, node, list):
+        count = 1
+        for i in node.Children:
+            count += self.findPath(i, list)
+        if count % 2 == 0 and node.Parent is not None:
+            list.append(node.Parent)
+            list.append(node)
+            count = 0
+        return count
+
+    def EvenTrees(self):
+        outputList = []
+        if self.Root is None:
+            return outputList
+        self.findPath(self.Root, outputList)
+        return outputList

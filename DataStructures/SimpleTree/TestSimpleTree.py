@@ -190,3 +190,38 @@ class TestBloomFilter(unittest.TestCase):
 
         self.assertEqual(tree.Count(), 7)
         self.assertEqual(tree.LeafCount(), 5)
+
+    def test_EvenTrees(self):
+        nodeRoot = SimpleTreeNode(1, None)
+        node1 = SimpleTreeNode(2, None)
+        node2 = SimpleTreeNode(3, None)
+        node3 = SimpleTreeNode(4, None)
+        node4 = SimpleTreeNode(5, None)
+        node5 = SimpleTreeNode(6, None)
+        node6 = SimpleTreeNode(7, None)
+        node7 = SimpleTreeNode(8, None)
+        node8 = SimpleTreeNode(9, None)
+        node9 = SimpleTreeNode(10, None)
+        tree = SimpleTree(nodeRoot)
+
+        tree.AddChild(tree.Root, node1)
+        tree.AddChild(tree.Root, node2)
+        tree.AddChild(tree.Root, node5)
+        tree.AddChild(tree.Root.Children[0], node4)
+        tree.AddChild(tree.Root.Children[0], node6)
+        tree.AddChild(tree.Root.Children[1], node3)
+        tree.AddChild(tree.Root.Children[2], node7)
+        tree.AddChild(tree.Root.Children[2].Children[0], node8)
+        tree.AddChild(tree.Root.Children[2].Children[0], node9)
+
+        self.assertEqual(tree.Count(), 10)
+        self.assertEqual(tree.LeafCount(), 5)
+
+        self.assertEqual(tree.EvenTrees()[0], nodeRoot)
+        self.assertEqual(tree.EvenTrees()[1], node2)
+        self.assertEqual(tree.EvenTrees()[2], nodeRoot)
+        self.assertEqual(tree.EvenTrees()[3], node5)
+
+
+if __name__ == '__main__':
+    unittest.main()
