@@ -34,15 +34,18 @@ class TestBST(unittest.TestCase):
         self.assertEqual(graph.IsEdge(0, 1), False)
         self.assertEqual(graph.IsEdge(1, 0), False)
 
-    def test_Add(self):
+    def test_DepthFirstSearch(self):
         graph = SimpleGraph(3)
         graph.AddVertex(1)
         graph.AddVertex(2)
         graph.AddVertex(3)
         graph.AddEdge(1, 2)
 
-        
-        #self.assertEqual(graph.IsEdge(2, 1), False)
+
+        self.assertEqual(graph.DepthFirstSearch(0, 1), [])
+        self.assertEqual(graph.DepthFirstSearch(0, 1), [])
+        self.assertEqual(graph.DepthFirstSearch(1, 2)[0].Value, 2)
+        self.assertEqual(graph.DepthFirstSearch(1, 2)[1].Value, 3)
 
 if __name__ == '__main__':
     unittest.main()

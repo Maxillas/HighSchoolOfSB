@@ -160,42 +160,47 @@ class SimpleGraph:
         for i in self.vertex:
             i.hit = False
 
-    def searchTargetInSelf(self, startIndex, endIndex):
+    def searchTargetInSelf(self, startIndex):
         for i in range(len(self.m_adjacency[startIndex])):
-            if self.vertex[i].hit is True:
-                currentVertex = self.vertex[i]
-                return self.search(currentVertex, startIndex, endIndex)
-        return
+            if self.vertex[i].hit is False:
+                return self.vertex[i]
+        return None
 
-    def search(self, currentVertex, startIndex, endIndex):
-        currentVertex.hit = True
-        self.stack.push(currentVertex)
-
+    def searchVertex(self, startIndex, endIndex):
         for i in range(len(self.m_adjacency[startIndex])):
-            if self.m_adjacency[startIndex][i] == 1:
-                self.stack.push(self.vertex[i])
-                return self.stack
-        if self.searchTargetInSelf(startIndex, endIndex) is None:
-            #реализовать это в главной функции, где вызывать эти функции частично
-        upperElement = self.stack.pop()
-        if self.stack.size == 0:
-            return # path not found
-        else:
-            currentVertex = upperElement
+            if self.m_adjacency[startIndex][endIndex] == 1:
+                return True
+        return False
+
+    def DepthSearch(self, startIndex, endIndex):
+        currentVertex = self.vertex[startIndex]
+        result = []
+        while True:
             currentVertex.hit = True
-
-
+            self.stack.push(currentVertex)
+            while True:
+                if self.searchVertex(startIndex, endIndex):
+                    self.stack.push(self.vertex[endIndex])
+                    return self.stack
+                currentVertex = self.searchTargetInSelf(startIndex)
+                if currentVertex is not None:
+                    break
+                self.stack.pop()
+                if self.stack.size() == 0:
+                    #print("path not found")
+                    return #path not found
+                currentVertex = self.stack.pop()
+                currentVertex.hit = True
 
 
 
     def DepthFirstSearch(self, startIndex, endIndex):
-        
         self.clearStack()
         self.clearHit()
-        currentVertex = self.vertex[startIndex]
-
-        search(currentVertex, startIndex, endIndex)
-        
-        
-        # удаление ребра между вершинами v1 и v2
-        pass
+        outputList = [None, None]
+        result = self.DepthSearch(startIndex, endIndex)
+        if result is None:
+            return []
+        outputList[1] = result.pop()
+        outputList[0] = result.pop()
+        return outputList
