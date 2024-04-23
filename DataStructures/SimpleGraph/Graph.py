@@ -173,7 +173,6 @@ class SimpleGraph:
         return False
 
     def DepthSearch(self, startIndex, endIndex):
-        #currentVertex = self.vertex[startIndex]
         currentVertexIndex = startIndex
         while True:
             self.vertex[currentVertexIndex].hit = True
@@ -203,7 +202,7 @@ class SimpleGraph:
             return []      
         outputList = []
         resultElement = 1
-        while resultElement:
+        while True:
             resultElement = result.pop()
             if resultElement is None:
                 break
