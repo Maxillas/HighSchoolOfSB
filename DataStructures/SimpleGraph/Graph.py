@@ -161,9 +161,9 @@ class SimpleGraph:
             i.hit = False
 
     def searchTargetInSelf(self, startIndex):
-        for i in range(len(self.m_adjacency[startIndex])):
-            if self.vertex[i].hit is False:
-                return self.vertex[i]
+        for index in range(len(self.m_adjacency[startIndex])):
+            if self.vertex[index].hit is False:
+                return index
         return None
 
     def searchVertex(self, startIndex, endIndex):
@@ -173,34 +173,41 @@ class SimpleGraph:
         return False
 
     def DepthSearch(self, startIndex, endIndex):
-        currentVertex = self.vertex[startIndex]
-        result = []
+        #currentVertex = self.vertex[startIndex]
+        currentVertexIndex = startIndex
         while True:
-            currentVertex.hit = True
-            self.stack.push(currentVertex)
+            self.vertex[currentVertexIndex].hit = True
+            self.stack.push(currentVertexIndex)
             while True:
-                if self.searchVertex(startIndex, endIndex):
-                    self.stack.push(self.vertex[endIndex])
+                if self.searchVertex(currentVertexIndex, endIndex):
+                    self.stack.push(endIndex)
                     return self.stack
-                currentVertex = self.searchTargetInSelf(startIndex)
-                if currentVertex is not None:
+                currentVertexIndex = self.searchTargetInSelf(currentVertexIndex)
+
+                if currentVertexIndex is not None and currentVertexIndex <= endIndex:
                     break
                 self.stack.pop()
                 if self.stack.size() == 0:
                     #print("path not found")
                     return #path not found
-                currentVertex = self.stack.pop()
-                currentVertex.hit = True
+                currentVertexIndex = self.stack.pop()
+                self.vertex[currentVertexIndex].hit = True
 
 
 
     def DepthFirstSearch(self, startIndex, endIndex):
         self.clearStack()
         self.clearHit()
-        outputList = [None, None]
         result = self.DepthSearch(startIndex, endIndex)
         if result is None:
-            return []
-        outputList[1] = result.pop()
-        outputList[0] = result.pop()
+            return []      
+        outputList = []
+        resultElement = 1
+        while resultElement:
+            resultElement = result.pop()
+            if resultElement is None:
+                break
+            outputList.append(self.vertex[resultElement])
+        outputList.reverse()
+        
         return outputList
