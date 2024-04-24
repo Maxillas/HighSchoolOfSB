@@ -266,16 +266,16 @@ class SimpleGraph:
 
             if secondVertexIndex == endIndex and self.searchVertex(currentVertexIndex, secondVertexIndex):
                 if len(path) == 0:
-                    path.append(temp)
-                path.append(secondVertexIndex)
+                    path.append(self.vertex[temp])
+                path.append(self.vertex[secondVertexIndex])
                 return path
             elif secondVertexIndex is None:
                 if self.queue.size() == 0:
                     return []  # path not found
                 currentVertexIndex = self.queue.dequeue()
                 if len(path) == 0:
-                    path.append(temp)
-                path.append(currentVertexIndex)
+                    path.append(self.vertex[temp])
+                path.append(self.vertex[currentVertexIndex])
                 continue
             self.vertex[secondVertexIndex].hit = True
             self.queue.enqueue(secondVertexIndex)

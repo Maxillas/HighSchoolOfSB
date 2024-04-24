@@ -107,15 +107,15 @@ class TestBST(unittest.TestCase):
         self.assertEqual(graph.BreadthFirstSearch(0, 1), [])
 
         graph.AddEdge(0, 1)
-        self.assertEqual(graph.BreadthFirstSearch(0, 1)[0], 0)
-        self.assertEqual(graph.BreadthFirstSearch(0, 1)[1], 1)
+        self.assertEqual(graph.BreadthFirstSearch(0, 1)[0].Value, 0)
+        self.assertEqual(graph.BreadthFirstSearch(0, 1)[1].Value, 1)
 
-        self.assertEqual(graph.BreadthFirstSearch(0, 2)[0], 0)
-        self.assertEqual(graph.BreadthFirstSearch(0, 2)[1], 1)
-        self.assertEqual(graph.BreadthFirstSearch(0, 2)[2], 2)
+        self.assertEqual(graph.BreadthFirstSearch(0, 2)[0].Value, 0)
+        self.assertEqual(graph.BreadthFirstSearch(0, 2)[1].Value, 1)
+        self.assertEqual(graph.BreadthFirstSearch(0, 2)[2].Value, 2)
 
-        self.assertEqual(graph.BreadthFirstSearch(1, 2)[0], 1)
-        self.assertEqual(graph.BreadthFirstSearch(1, 2)[1], 2)
+        self.assertEqual(graph.BreadthFirstSearch(1, 2)[0].Value, 1)
+        self.assertEqual(graph.BreadthFirstSearch(1, 2)[1].Value, 2)
 
 if __name__ == '__main__':
     unittest.main()
