@@ -1,103 +1,134 @@
-import ctypes
+class Node:
+    def __init__(self, v):
+        self.value = v
+        self.next = None
 
 
-class DynArray:
-
+class LinkedList:
     def __init__(self):
-        self.count = 0
-        self.capacity = 16
-        self.array = self.make_array(self.capacity)
+        self.head = None
+        self.tail = None
 
-    def __len__(self):
-        return self.count
-
-    def make_array(self, new_capacity):
-        return (new_capacity * ctypes.py_object)()
-
-    def __getitem__(self, i):
-        if i < 0 or i >= self.count:
-            raise IndexError('Index is out of bounds')
-        return self.array[i]
-
-    def resize(self, new_capacity):
-        new_array = self.make_array(new_capacity)
-        for i in range(self.count):
-            new_array[i] = self.array[i]
-        self.array = new_array
-        self.capacity = new_capacity
-
-    def append(self, itm):
-        if self.count == self.capacity:
-            self.resize(2 * self.capacity)
-        self.array[self.count] = itm
-        self.count += 1
-
-    def insert(self, i, itm):
-        if i < 0 or i > self.count:
-            raise IndexError('Index is out of bounds')
-        temp = None
-        flag = False
-        if self.count == 0:
-            self.append(itm)
+    def add_in_tail(self, item):
+        if self.head is None:
+            self.head = item
         else:
-            self.append(0)
-            for j in range(i, self.count):
+            self.tail.next = item
 
-                if i == j:
-                    temp = self.array[j]
-                    self.array[j] = itm
-                    flag = True
-                elif flag is True and i != self.count - 1:
-                    temp2 = self.array[j]
-                    self.array[j] = temp
-                    temp = temp2
+        self.tail = item
 
-    def delete(self, i):
-        if i < 0 or i >= self.count:
-            raise IndexError('Index is out of bounds')
+    def print_all_nodes(self):
+        node = self.head
+        while node is not None:
+            print(node.value)
+            node = node.next
 
-        flag = False
-        for j in range(i, self.count):
+    def find(self, val):
+        node = self.head
+        while node is not None:
+            if node.value == val:
+                return node
+            node = node.next
+        return None
 
-            if i == j and j != self.count - 1:
-                self.array[j] = self.array[j + 1]
-                flag = True
-            elif flag is True and j != self.count - 1:
-                self.array[j] = self.array[j + 1]
+    def find_all(self, val):
+        output = []
+        node = self.head
+        while node is not None:
+            if node.value == val:
+                output.append(node)
+            node = node.next
+        return output
 
-        self.count -= 1
+    def delete(self, val, all=False):
+        node = self.head
+        prev_node = None
 
-        if self.count < int(self.capacity * 0.5):
-            self.capacity = int(self.capacity / 1.5)
-        if self.capacity < 16:
-            self.capacity = 16
+        while node is not None:
+            if node.value == val:
+                if prev_node is None:
+                    self.head = self.head.next
+                    if self.head is None:
+                        self.tail = None
+                    if all is False:
+                        if self.head is not None and self.head.next is None:
+                            self.tail = self.head
+                        node.next = None
+                        break
+                    else:
+                        temp = node.next
+                        node.next = None
+                        node = temp
+                        if self.head is not None and self.head.next is None:
+                            self.tail = self.head
+                        continue
+                else:
+                    prev_node.next = node.next
+                    if all is False:
+                        if node.next is None:
+                            self.tail = prev_node
+                        node.next = None
+                        break
+                    elif node.next is not None and node.next.value == val:
+                        node = node.next
+                        continue
+                if node.next is None:
+                    self.tail = prev_node
+            prev_node = node
+            node = node.next
 
+    def clean(self):
+        node = self.head
+        while node is not None:
+            temp = node.next
+            node.next = None
+            node = temp
+        self.head = None
+        self.tail = None
 
-class Stack:
+    def len(self):
+        node = self.head
+        output = 0
+        while node is not None:
+            output += 1
+            node = node.next
+        return output
+
+    def insert(self, afterNode, newNode):
+        if afterNode is None:
+            node = self.head
+            self.head = newNode
+            newNode.next = node
+            if self.head.next is None:
+                self.tail = self.head
+
+        else:
+            node = afterNode.next
+            afterNode.next = newNode
+            newNode.next = node
+            if node is None and self.head is not None:
+                self.tail = newNode
+
+class Queue:
     def __init__(self):
-        self.stack = DynArray()
+        self.queue = LinkedList()
+
+    def enqueue(self, item):
+        node = Node(item)
+        self.queue.add_in_tail(node)
+
+    def dequeue(self):
+        if self.queue.len() == 0:
+            return None
+        else:
+            temp = self.queue.head.value
+            self.queue.delete(temp)
+            return temp
 
     def size(self):
-        return self.stack.count
+        return self.queue.len()
 
-    def pop(self):
-        if self.stack.count == 0:
-            temp = None
-        else:
-            temp = self.stack[0]
-            self.stack.delete(0)
-        return temp
 
-    def push(self, value):
-        self.stack.insert(0, value)
-
-    def peek(self):
-        if self.stack.count == 0:
-            temp = None
-        else:
-            temp = self.stack[0]
-        return temp
-    
 class Vertex:
 
     def __init__(self, val):
@@ -111,7 +142,8 @@ class SimpleGraph:
         self.max_vertex = size
         self.m_adjacency = [[0] * size for _ in range(size)]
         self.vertex = [None] * size
-        self.stack = Stack()
+        #self.stack = Stack()
+        self.queue = Queue()
 
     def AddVertex(self, v):
         for i in range(len(self.vertex)):
@@ -121,6 +153,10 @@ class SimpleGraph:
         return
         # здесь и далее, параметры v -- индекс вершины
         # в списке  vertex
+    def clearAdjancy(self):
+        for i in range(self.max_vertex - 1):
+            self.m_adjacency[1][i] = 0
+            self.m_adjacency[i][1] = 0
 
     def RemoveVertex(self, v):
         for i in range(len(self.vertex)):
@@ -128,9 +164,7 @@ class SimpleGraph:
                 continue
             if self.vertex[i].Value == v:
                 self.vertex[i] = None
-                for i in range(self.max_vertex - 1):
-                    self.m_adjacency[1][i] = 0
-                    self.m_adjacency[i][1] = 0
+                self.clearAdjancy()
         # ваш код удаления вершины со всеми её рёбрами
 
     def IsEdge(self, v1, v2):
@@ -143,7 +177,7 @@ class SimpleGraph:
         self.m_adjacency[v1][v2] = 1
         self.m_adjacency[v2][v1] = 1
         # добавление ребра между вершинами v1 и v2
-        
+
     def RemoveEdge(self, v1, v2):
         self.m_adjacency[v1][v2] = 0
         self.m_adjacency[v2][v1] = 0
@@ -154,7 +188,7 @@ class SimpleGraph:
         i = self.stack.pop()
         while i != None:
             i = self.stack.pop()
-            continue    
+            continue
 
     def clearHit(self):
         for i in self.vertex:
@@ -172,41 +206,79 @@ class SimpleGraph:
                 return True
         return False
 
-    def DepthSearch(self, startIndex, endIndex):
-        currentVertexIndex = startIndex
-        while True:
-            self.vertex[currentVertexIndex].hit = True
-            self.stack.push(currentVertexIndex)
-            while True:
-                if self.searchVertex(currentVertexIndex, endIndex):
-                    self.stack.push(endIndex)
-                    return self.stack
-                currentVertexIndex = self.searchTargetInSelf(currentVertexIndex)
+    # def DepthSearch(self, startIndex, endIndex):
+    #     currentVertexIndex = startIndex
+    #     while True:
+    #         self.vertex[currentVertexIndex].hit = True
+    #         self.stack.push(currentVertexIndex)
+    #         while True:
+    #             if self.searchVertex(currentVertexIndex, endIndex):
+    #                 self.stack.push(endIndex)
+    #                 return self.stack
+    #             currentVertexIndex = self.searchTargetInSelf(currentVertexIndex)
+    #
+    #             if currentVertexIndex is not None and currentVertexIndex <= endIndex:
+    #                 break
+    #             self.stack.pop()
+    #             if self.stack.size() == 0:
+    #                 #print("path not found")
+    #                 return #path not found
+    #             currentVertexIndex = self.stack.pop()
+    #             self.vertex[currentVertexIndex].hit = True
 
-                if currentVertexIndex is not None and currentVertexIndex <= endIndex:
-                    break
-                self.stack.pop()
-                if self.stack.size() == 0:
-                    #print("path not found")
-                    return #path not found
-                currentVertexIndex = self.stack.pop()
-                self.vertex[currentVertexIndex].hit = True
+    # def DepthFirstSearch(self, startIndex, endIndex):
+    #     self.clearStack()
+    #     self.clearHit()
+    #     result = self.DepthSearch(startIndex, endIndex)
+    #     if result is None:
+    #         return []
+    #     outputList = []
+    #     resultElement = 1
+    #     while True:
+    #         resultElement = result.pop()
+    #         if resultElement is None:
+    #             break
+    #         outputList.append(self.vertex[resultElement])
+    #     outputList.reverse()
+    #
+    #     return outputList
 
+    def SearchUnvisitedFriend(self, startIndex):
+        for index in range(len(self.m_adjacency[startIndex])):
+            if self.vertex[index].hit is False and self.searchVertex(startIndex, index):
+                return index
+        return None
 
+    def clearQueue(self):
+        i = self.queue.dequeue()
+        while i != None:
+            i = self.queue.dequeue()
 
-    def DepthFirstSearch(self, startIndex, endIndex):
-        self.clearStack()
+    def BreadthFirstSearch(self, startIndex, endIndex):
+        self.clearQueue()
         self.clearHit()
-        result = self.DepthSearch(startIndex, endIndex)
-        if result is None:
-            return []      
-        outputList = []
-        resultElement = 1
+        currentVertexIndex = startIndex
+        self.vertex[currentVertexIndex].hit = True
+        path = []
         while True:
-            resultElement = result.pop()
-            if resultElement is None:
-                break
-            outputList.append(self.vertex[resultElement])
-        outputList.reverse()
-        
-        return outputList
+            temp = currentVertexIndex
+            secondVertexIndex = self.SearchUnvisitedFriend(currentVertexIndex)
+
+            if secondVertexIndex == endIndex and self.searchVertex(currentVertexIndex, secondVertexIndex):
+                if len(path) == 0:
+                    path.append(temp)
+                path.append(secondVertexIndex)
+                return path
+            elif secondVertexIndex is None:
+                if self.queue.size() == 0:
+                    return []  # path not found
+                currentVertexIndex = self.queue.dequeue()
+                if len(path) == 0:
+                    path.append(temp)
+                path.append(currentVertexIndex)
+                continue
+            self.vertex[secondVertexIndex].hit = True
+            self.queue.enqueue(secondVertexIndex)
+
+
+
