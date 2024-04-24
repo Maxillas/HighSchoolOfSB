@@ -244,10 +244,12 @@ class SimpleGraph:
     #     return outputList
 
     def SearchUnvisitedFriend(self, startIndex):
+        output = []
         for index in range(len(self.m_adjacency[startIndex])):
             if self.vertex[index].hit is False and self.searchVertex(startIndex, index):
-                return index
-        return None
+                output.append(index)
+        return output
+
 
     def clearQueue(self):
         i = self.queue.dequeue()
@@ -257,28 +259,25 @@ class SimpleGraph:
     def BreadthFirstSearch(self, startIndex, endIndex):
         self.clearQueue()
         self.clearHit()
-        currentVertexIndex = startIndex
-        self.vertex[currentVertexIndex].hit = True
-        path = []
-        while True:
-            temp = currentVertexIndex
-            secondVertexIndex = self.SearchUnvisitedFriend(currentVertexIndex)
+        path = [self.vertex[startIndex]]
+        tuple = (startIndex, path)
+        self.queue.enqueue(tuple)
 
-            if secondVertexIndex == endIndex and self.searchVertex(currentVertexIndex, secondVertexIndex):
-                if len(path) == 0:
-                    path.append(self.vertex[temp])
-                path.append(self.vertex[secondVertexIndex])
-                return path
-            elif secondVertexIndex is None:
-                if self.queue.size() == 0:
-                    return []  # path not found
-                currentVertexIndex = self.queue.dequeue()
-                if len(path) == 0:
-                    path.append(self.vertex[temp])
-                path.append(self.vertex[currentVertexIndex])
-                continue
-            self.vertex[secondVertexIndex].hit = True
-            self.queue.enqueue(secondVertexIndex)
+        while self.queue is not None:
+            tuple = self.queue.dequeue()
+            if tuple is None:
+                break
+            currentVertexIndex = tuple[0]
+            path = tuple[1]
+            self.vertex[currentVertexIndex].hit = True
+            friendsVertexIndex = self.SearchUnvisitedFriend(currentVertexIndex)
 
-
-
+            for vertexIndex in friendsVertexIndex:
+                if self.vertex[vertexIndex].hit is True:
+                    continue
+                if vertexIndex == endIndex:
+                    path.append(self.vertex[vertexIndex])
+                    return path
+                tuple = (vertexIndex, path + [self.vertex[vertexIndex]])
+                self.queue.enqueue(tuple)
+        return []
