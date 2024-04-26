@@ -281,3 +281,19 @@ class SimpleGraph:
                 tuple = (vertexIndex, path + [self.vertex[vertexIndex]])
                 self.queue.enqueue(tuple)
         return []
+
+    def isWeak(self, friends):
+        for friend in friends:
+            for friendFriend in friends:
+                if friendFriend != friend and self.m_adjacency[friend][friendFriend] == 1:
+                    return False
+        return True
+
+    def WeakVertices(self):
+        output = []
+        for vertexIndex, vertex in enumerate(self.vertex):
+            friends = self.SearchUnvisitedFriend(vertexIndex)
+            if self.isWeak(friends):
+                output.append(self.vertex[vertexIndex])
+        return  output
+

@@ -117,6 +117,7 @@ class TestBST(unittest.TestCase):
         self.assertEqual(graph.BreadthFirstSearch(1, 2)[0].Value, 1)
         self.assertEqual(graph.BreadthFirstSearch(1, 2)[1].Value, 2)
 
+
     def test_DepthFirstSearc2(self):
         graph = SimpleGraph(11)
         graph.AddVertex(0)
@@ -158,6 +159,36 @@ class TestBST(unittest.TestCase):
         self.assertEqual(graph.BreadthFirstSearch(3, 7)[1].Value, 1)
         self.assertEqual(graph.BreadthFirstSearch(3, 7)[2].Value, 2)
         self.assertEqual(graph.BreadthFirstSearch(3, 7)[3].Value, 7)
+
+
+    def test_Weak(self):
+        graph = SimpleGraph(9)
+        graph.AddVertex(0)
+        graph.AddVertex(1)
+        graph.AddVertex(2)
+        graph.AddVertex(3)
+        graph.AddVertex(4)
+        graph.AddVertex(5)
+        graph.AddVertex(6)
+        graph.AddVertex(7)
+        graph.AddVertex(8)
+        graph.AddEdge(0, 1)
+        graph.AddEdge(1, 2)
+        graph.AddEdge(1, 3)
+        graph.AddEdge(2, 3)
+        graph.AddEdge(0, 3)
+        graph.AddEdge(0, 4)
+        graph.AddEdge(3, 5)
+        graph.AddEdge(4, 5)
+        graph.AddEdge(5, 6)
+        graph.AddEdge(5, 7)
+        graph.AddEdge(6, 7)
+        graph.AddEdge(7, 8)
+        
+
+        self.assertEqual(len(graph.WeakVertices()), 2)
+        self.assertEqual(graph.WeakVertices()[0].Value, 4)
+        self.assertEqual(graph.WeakVertices()[1].Value, 8)
 
 if __name__ == '__main__':
     unittest.main()
