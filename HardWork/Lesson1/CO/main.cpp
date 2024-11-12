@@ -87,6 +87,8 @@ void MobiventTest::validateSensorTest (Service_t::OPER_MODE typeOfTest, ushort t
 
 Способы:
 1. Полиморфизм подтипов
+2. Избавление от вложенных if
+3. Избавление от else
 
 
 
