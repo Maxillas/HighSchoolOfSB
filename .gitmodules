@@ -1,0 +1,9 @@
+[submodule "Recursion"]
+	path = Recursion
+	url = git@github.com:Maxillas/Recursion.git
+[submodule "CC"]
+	path = CC
+	url = git@github.com:Maxillas/CC.git
+[submodule "SQL"]
+	path = SQL
+	url = git@github.com:Maxillas/SQL.git
