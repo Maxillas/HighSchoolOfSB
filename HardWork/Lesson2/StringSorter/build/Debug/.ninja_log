@@ -1,5 +1,0 @@
-# ninja log v5
-1	26	1732342703902415712	CMakeFiles/sorter_test_task.dir/sortertests.cpp.o	bc0a594af11853b7
-1	430	1732342704289411964	CMakeFiles/sorter_test_task.dir/main.cpp.o	a976a6b29623b27
-2	570	1732342704441410492	CMakeFiles/sorter_test_task.dir/sorter.cpp.o	d24083fe61b22dd0
-570	797	1732342704671408264	sorter_test_task	639a2d812e3d3b4d

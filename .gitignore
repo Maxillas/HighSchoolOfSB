@@ -2,5 +2,6 @@
 */.idea
 BinarySimpleTree/.idea
 */build/*
+*build/
 *txt.user
 /HardWork/Lesson2/StringSorter/build/*
