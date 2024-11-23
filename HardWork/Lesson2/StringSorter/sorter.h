@@ -19,13 +19,15 @@ class Sorter {
     };
 
 public:
+    Sorter(){};
     Sorter(SORTING_METHOD sortingMethod, std::string fileName);
     void setSortingMethod (SORTING_METHOD newMethod);
     void setFileName(std::string fileName);
+
     std::vector<Person> sorting();
 private:
     SORTING_METHOD m_sorting_method;
-    std::ifstream m_file;
+    std::fstream m_file;
     std::vector<Person> m_person;
     bool sortByFirstName(const Person& first, const Person& second);
     bool sortByLastName(const Person& first, const Person& second);

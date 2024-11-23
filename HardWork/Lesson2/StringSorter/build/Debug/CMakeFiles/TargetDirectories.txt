@@ -1,0 +1,3 @@
+/home/maxillas/Lessons/HighSchoolOfSB/HardWork/Lesson2/StringSorter/build/Debug/CMakeFiles/sorter_test_task.dir
+/home/maxillas/Lessons/HighSchoolOfSB/HardWork/Lesson2/StringSorter/build/Debug/CMakeFiles/edit_cache.dir
+/home/maxillas/Lessons/HighSchoolOfSB/HardWork/Lesson2/StringSorter/build/Debug/CMakeFiles/rebuild_cache.dir

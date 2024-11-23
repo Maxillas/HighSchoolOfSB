@@ -1,0 +1,1 @@
+clang++  -fsanitize=fuzzer -fsanitize=address -g -g CMakeFiles/sorter_test_task.dir/main.cpp.o CMakeFiles/sorter_test_task.dir/sortertests.cpp.o CMakeFiles/sorter_test_task.dir/sorter.cpp.o -o sorter_test_task 

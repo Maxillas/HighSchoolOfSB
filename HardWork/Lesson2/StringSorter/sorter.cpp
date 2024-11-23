@@ -40,10 +40,10 @@ void Sorter::setSortingMethod(SORTING_METHOD newMethod) {
 void Sorter::setFileName(std::string fileName) {
     m_file.open(fileName);
     if(!m_file.is_open()) {
-        std::cerr << "Ошибка чтения файла" << std::endl;
+       // std::cerr << "Ошибка чтения файла" << std::endl;
         return;
     }
-    std::cout << "Файл успешно открыт" << std::endl;
+   // std::cout << "Файл успешно открыт" << std::endl;
 }
 
 std::vector<Sorter::Person> Sorter::sorting() {
