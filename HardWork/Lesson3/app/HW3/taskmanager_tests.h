@@ -41,11 +41,11 @@ public:
 
         m_taskManager.removeTask("clean room");
         bool test2 = m_taskManager.m_tasks.size() == 2 &&
-                     m_taskManager.m_tasks.at(0).taskName == "cleans room";
+                     m_taskManager.m_tasks.at(0).taskName == "cleanser room";
 
         m_taskManager.removeTask("error!");
         bool test3 = m_taskManager.m_tasks.size() == 2 &&
-                     m_taskManager.m_tasks.at(0).taskName == "cleans room";
+                     m_taskManager.m_tasks.at(0).taskName == "cleanser room";
 
         m_taskManager.removeTask("cleans room");
         bool test4 = m_taskManager.m_tasks.size() == 1 &&
@@ -76,14 +76,14 @@ public:
                      m_taskManager.m_tasks.at(2).status == false;
 
         m_taskManager.markTaskCompleted("first task");
-        bool test1 = result && (m_taskManager.m_tasks.at(0).status == true) &&
+        bool test1 = result && (m_taskManager.m_tasks.at(0).status == false) &&
                                (m_taskManager.m_tasks.at(1).status == false) &&
-                               (m_taskManager.m_tasks.at(2).status == false);
+                               (m_taskManager.m_tasks.at(2).status == true);
 
         m_taskManager.markTaskCompleted("second task");
         bool test2 = result && (m_taskManager.m_tasks.at(1).status == true) &&
-                               (m_taskManager.m_tasks.at(0).status == true) &&
-                               (m_taskManager.m_tasks.at(2).status == false);
+                               (m_taskManager.m_tasks.at(0).status == false) &&
+                               (m_taskManager.m_tasks.at(2).status == true);
 
         m_taskManager.markTaskCompleted("third task");
         bool test3 = result && (m_taskManager.m_tasks.at(2).status == true) &&
@@ -111,13 +111,13 @@ public:
         m_taskManager.markTaskCompleted("second task");
         std::vector<std::string> secondRes = m_taskManager.filterByStatus(true);
         bool test2 = secondRes.size() == 2 && m_taskManager.m_tasks.size() == 3 &&
-                     secondRes.at(0) == "first task" && secondRes.at(1) == "second task";
+                     secondRes.at(0) == "second task" && secondRes.at(1) == "first task";
 
         m_taskManager.markTaskCompleted("third task");
         std::vector<std::string> thirdRes = m_taskManager.filterByStatus(true);
         bool test3 = thirdRes.size() == 3 && m_taskManager.m_tasks.size() == 3 &&
-                     thirdRes.at(0) == "first task" && thirdRes.at(1) == "second task" &&
-                     thirdRes.at(2) == "third task";
+                     thirdRes.at(0) == "third task" && thirdRes.at(1) == "second task" &&
+                     thirdRes.at(2) == "first task";
 
         m_taskManager.m_tasks.clear();
 
@@ -127,8 +127,8 @@ public:
         bool temp = m_taskManager.m_tasks.size() == 3;
         std::vector<std::string> fourthRes = m_taskManager.filterByStatus(false);
         bool test4 = temp && (fourthRes.size() == 3 && m_taskManager.m_tasks.size() == 3) &&
-                     fourthRes.at(0) == "first task" && fourthRes.at(1) == "second task" &&
-                     fourthRes.at(2) == "third task";;
+                     fourthRes.at(0) == "third task" && fourthRes.at(1) == "second task" &&
+                     fourthRes.at(2) == "first task";;
 
         std::cout << "_filterByStatus_ Test1 is " << (test1 ? "passed" : "error") << std::endl;
         std::cout << "_filterByStatus_ Test2 is " << (test2 ? "passed" : "error") << std::endl;

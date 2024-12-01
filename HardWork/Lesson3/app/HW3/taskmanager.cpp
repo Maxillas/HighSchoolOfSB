@@ -8,7 +8,8 @@ void TaskManager::addTask(const std::string &name, uint8_t priority, const std::
     task.priority = priority;
     task.deadLine = deadline;
     task.status = false;
-    m_tasks.push_back(task);
+
+    m_tasks.insert(m_tasks.begin(), task);
 }
 
 void TaskManager::removeTask(const std::string &name)
