@@ -5,3 +5,5 @@ BinarySimpleTree/.idea
 *build/
 *txt.user
 /HardWork/Lesson2/StringSorter/build/*
+
+*/__pycache__
