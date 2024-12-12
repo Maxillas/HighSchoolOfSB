@@ -1,4 +1,5 @@
 import unittest
+import math
 #import hoare
 
 def ArrayChunk(array):
@@ -33,15 +34,41 @@ def ArrayChunk(array):
             N_index = i1
         
         array[i1], array[i2] = array[i2], array[i1]
-        
+
+
+def partition(nums, left, right):  
+
+    pivot = nums[(left + right) // 2]
+    i1 = left - 1
+    i2 = right + 1
+    while True:
+        i1 += 1
+        while nums[i1] < pivot:
+            i1 += 1
+
+        i2 -= 1
+        while nums[i2] > pivot:
+            i2 -= 1
+
+        if i1 >= i2:
+            return i2
+
+        nums[i1], nums[i2] = nums[i2], nums[i1]
+
 
 def QuickSort(array, left, right):
     if(left == right):
         return
-    N = ArrayChunk(array[left:right])
+    #newArray = array[left:(right + 1)]
 
-    QuickSort(array, left, (N - 1))
+    N = partition(array, left, right)
+    # leftAr = array[0:N]
+    # rightAr = array[(N + 1):(len(array))]
+        
+    QuickSort(array, left, (N))
     QuickSort(array, (N + 1), right)
+
+
 # list = [7,5,6,4,3,1,2]
 
 # print(ArrayChunk(list), " = ", list)
@@ -71,6 +98,10 @@ class TestBST(unittest.TestCase):
         test1 = [7,5,6,4,3,1,2]
         QuickSort(test1, 0, len(test1) - 1)
         self.assertEqual(test1, [1,2,3,4,5,6,7])
+
+        test2 = [7,5,6,4,3,1]
+        QuickSort(test2, 0, len(test2) - 1)
+        self.assertEqual(test2, [1,3,4,5,6,7])
 
 
 

@@ -34,7 +34,7 @@ def ArrayChunk(array):
 def QuickSort(array, left, right):
     if(left == right):
         return
-    N = ArrayChunk(array[left:right + 1])
+    N = ArrayChunk(array[left:(right + 1)])
 
     QuickSort(array, left, (N - 1))
     QuickSort(array, (N + 1), right)
