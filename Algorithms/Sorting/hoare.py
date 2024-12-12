@@ -30,11 +30,33 @@ def ArrayChunk(array):
             N_index = i1
         
         array[i1], array[i2] = array[i2], array[i1]
-          
+
+
+def partition(nums, left, right):  
+
+    pivot = nums[(left + right) // 2]
+    i1 = left - 1
+    i2 = right + 1
+    while True:
+        i1 += 1
+        while nums[i1] < pivot:
+            i1 += 1
+
+        i2 -= 1
+        while nums[i2] > pivot:
+            i2 -= 1
+
+        if i1 >= i2:
+            return i2
+
+        nums[i1], nums[i2] = nums[i2], nums[i1]
+
+
 def QuickSort(array, left, right):
     if(left == right):
         return
-    N = ArrayChunk(array[left:(right + 1)])
 
-    QuickSort(array, left, (N - 1))
+    N = partition(array, left, right)
+        
+    QuickSort(array, left, (N))
     QuickSort(array, (N + 1), right)
