@@ -74,4 +74,4 @@ def QuickSortTailOptimization(array, left, right):
             x2 = right
             right = N 
             
-        QuickSort(array, x1, x2)
+        QuickSortTailOptimization(array, x1, x2)
