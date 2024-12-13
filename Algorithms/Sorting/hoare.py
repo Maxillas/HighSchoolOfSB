@@ -62,12 +62,12 @@ def QuickSort(array, left, right):
     QuickSort(array, (N + 1), right)
 
 def QuickSortTailOptimization(array, left, right):
-    if(left == right):
-        return
-    N = partition(array, left, right)
-    leftSide = True
-    while(leftSide):
-        QuickSortTailOptimization(array, left, (N))
-        leftSide = False
+    while left < right:
+        N = partition(array, left, right)
     
-    QuickSortTailOptimization(array, (N + 1), right)
+        if N - left < right - N:
+            QuickSort(array, left, N)
+            left = N + 1
+        else:
+            QuickSort(array, N + 1, right)
+            right = N 
