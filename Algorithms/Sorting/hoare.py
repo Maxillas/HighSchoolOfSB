@@ -66,8 +66,12 @@ def QuickSortTailOptimization(array, left, right):
         N = partition(array, left, right)
     
         if N - left < right - N:
-            QuickSort(array, left, N)
+            x1 = left
+            x2 = N
             left = N + 1
         else:
-            QuickSort(array, N + 1, right)
+            x1 = N + 1
+            x2 = right
             right = N 
+            
+        QuickSort(array, x1, x2)
