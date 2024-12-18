@@ -1,13 +1,13 @@
-def Divide(array):
+def MergeSort(array):
     if(len(array) <= 1):
         return array
-    left = Divide(array[0:(len(array) // 2)])
-    right = Divide(array[(len(array) // 2) : len(array)])
+    left = MergeSort(array[0:(len(array) // 2)])
+    right = MergeSort(array[(len(array) // 2) : len(array)])
 
-    return MergeSort(left, right)
+    return Rule(left, right)
     
 
-def MergeSort(left, right):
+def Rule(left, right):
     result = []
     i = 0
     j = 0
