@@ -1,3 +1,5 @@
+
+
 class TestBST(unittest.TestCase):
     
     def test_index(self):
@@ -8,6 +10,7 @@ class TestBST(unittest.TestCase):
         self.assertEqual(k.index(s1), 1)
         self.assertEqual(k.index(s2), 164)
         self.assertEqual(k.index(s3), 699)
+        self.assertEqual(k.index("h99"), 799)
 
     def test_add(self):
         s1 = "a01"
