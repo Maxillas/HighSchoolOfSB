@@ -23,13 +23,15 @@ class BinarySearch:
         elif(N > center):
             self.Left = centerIndex + 1
 
-        if(self.Left >= self.Right):
-            if 0 <= self.Left < len(self.array) and 0 <= self.Right < len(self.array):
-                if(self.array[self.Left] == N or self.array[self.Right] == N):
-                    self.complete = 1
-                    return
+        if self.Left > self.Right:
             self.complete = -1
             return
-        
+        elif self.Left == self.Right:
+            if self.array[self.Left] == N:
+                self.complete = 1
+            else:
+                self.complete = -1
+            return
+                
     def GetResult(self):
         return self.complete
