@@ -18,15 +18,16 @@ class BinarySearch:
         if(center == N):
             self.complete = 1
             return
-        if(N < center):
+        elif(N < center):
             self.right = centerIndex - 1
-        if(N > center):
+        elif(N > center):
             self.left = centerIndex + 1
 
         if(self.left >= self.right):
-            if(self.array[self.left] == N or self.array[self.right] == N):
-                self.complete = 1
-                return
+            if 0 <= self.left < len(self.array) and 0 <= self.right < len(self.array):
+                if(self.array[self.left] == N or self.array[self.right] == N):
+                    self.complete = 1
+                    return
             self.complete = -1
             return
         
