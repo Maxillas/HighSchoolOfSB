@@ -12,7 +12,7 @@ class BinarySearch:
         if(self.complete != 0):
             return
         
-        centerIndex = self.Left + (self.Right - self.Left) // 2
+        centerIndex = (self.Right + self.Left) // 2 #self.Left + (self.Right - self.Left) // 2
         center = self.array[centerIndex]
 
         if(center == N):
@@ -20,14 +20,14 @@ class BinarySearch:
             return
         elif(N < center):
             self.Right = centerIndex - 1
-        elif(N > center):
+        else:
             self.Left = centerIndex + 1
 
         if self.Left > self.Right:
             self.complete = -1
             return
-        elif self.Left == self.Right:
-            if self.array[self.Left] == N:
+        elif self.Left == self.Right or abs(self.Left - self.Right) == 1:
+            if self.array[self.Left] == N or self.array[self.Right] == N:
                 self.complete = 1
             else:
                 self.complete = -1
