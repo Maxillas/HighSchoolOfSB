@@ -3,8 +3,8 @@ class BinarySearch:
     def __init__(self, array):
         if not array:
             raise ValueError("Массив не может быть пустым.")
-        self.left = 0
-        self.right = len(array) - 1
+        self.Left = 0
+        self.Right = len(array) - 1
         self.array = array
         self.complete = 0
 
