@@ -37,9 +37,7 @@ class BinarySearch:
         return self.complete
 
 def GallopingSearch(array, N):
-    Left = 0
-    Right = len(array) - 1
-        
+
     if len(array) == 1:
         return array[0] == N
 
@@ -59,8 +57,8 @@ def GallopingSearch(array, N):
 
     bs = BinarySearch(array)
     if(array[index] > N):
-        Left = max((2 ** (i - 1) - 2) + 1, 0)
-        Right = min(index, len(array) - 1)
+        bs.Left = max((2 ** (i - 1) - 2) + 1, 0)
+        bs.Right = min(index, len(array) - 1)
         while(bs.complete == 0):
             bs.Step(N)       
     if(bs.complete == 1):
