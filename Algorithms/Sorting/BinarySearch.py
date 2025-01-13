@@ -32,34 +32,38 @@ class BinarySearch:
             else:
                 self.complete = -1
             return
-            
-    def GallopingSearch(self, array, N):
-        if len(array) == 1:
-            return array[0] == N
-        i = 1
-        index = 0
-        while ((index < (len(array) - 1)) and array[index] < N):
-            if(array[index] == N):
-                return True
-            index = 2 ** i - 2
-            i += 1
-        i -= 1
-        if(index >= (len(array) - 1)):
-            index = len(array) - 1
-
-        if(array[index] == N):
-            return True
-
-        if(array[index] > N):
-            self.complete = 0
-            self.Left = max((2 ** (i - 1) - 2) + 1, 0)
-            self.Right = min(index, len(array) - 1)
-            while(self.complete == 0):
-                self.Step(N)       
-        if(self.complete == 1):
-            return True
-        else: 
-            return False
-            
+                
     def GetResult(self):
         return self.complete
+
+def GallopingSearch(array, N):
+    Left = 0
+    Right = len(array) - 1
+        
+    if len(array) == 1:
+        return array[0] == N
+
+    i = 1
+    index = 0
+    while ((index < (len(array) - 1)) and array[index] < N):
+        if(array[index] == N):
+            return True
+        index = 2 ** i - 2
+        i += 1
+    i -= 1
+    if(index >= (len(array) - 1)):
+        index = len(array) - 1
+
+    if(array[index] == N):
+        return True
+
+    bs = BinarySearch(array)
+    if(array[index] > N):
+        Left = max((2 ** (i - 1) - 2) + 1, 0)
+        Right = min(index, len(array) - 1)
+        while(bs.complete == 0):
+            bs.Step(N)       
+    if(bs.complete == 1):
+        return True
+    else: 
+        return False
