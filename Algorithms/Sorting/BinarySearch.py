@@ -38,6 +38,9 @@ class BinarySearch:
 
 def GallopingSearch(array, N):
 
+    if not array:
+        raise ValueError("Массив не может быть пустым.")
+
     if len(array) == 1:
         return array[0] == N
 
@@ -49,19 +52,20 @@ def GallopingSearch(array, N):
         index = 2 ** i - 2
         i += 1
     i -= 1
-    if(index >= (len(array) - 1)):
+    if(index >= (len(array))):
         index = len(array) - 1
 
     if(array[index] == N):
         return True
 
-    bs = BinarySearch(array)
-    if(array[index] > N):
-        bs.Left = max((2 ** (i - 1) - 2) + 1, 0)
-        bs.Right = min(index, len(array) - 1)
-        while(bs.complete == 0):
-            bs.Step(N)       
-    if(bs.complete == 1):
-        return True
-    else: 
-        return False
+    if array[index] > N:
+        bs = BinarySearch(array)
+        bs.Left = max((2 ** (i - 1) - 2) + 1, 0)  # Левая граница
+        bs.Right = min(index, len(array) - 1)     # Правая граница
+
+        while bs.complete == 0:
+            bs.Step(N)
+
+        return bs.complete == 1
+
+    return False
