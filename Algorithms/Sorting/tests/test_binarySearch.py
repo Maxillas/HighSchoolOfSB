@@ -1,5 +1,45 @@
 class TestBS(unittest.TestCase):
-    
+
+    def test_Galopint(self):
+        search = BinarySearch([1, 3, 5, 7, 9])
+        self.assertEqual(search.GallopingSearch([1, 3, 5, 7, 9], 7), True) 
+
+    def test_galloping_search_found(self):
+        array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        bs = BinarySearch(array)
+        self.assertTrue(bs.GallopingSearch(array, 7))  # Элемент найден
+
+    def test_galloping_search_not_found(self):
+        array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        bs = BinarySearch(array)
+        self.assertFalse(bs.GallopingSearch(array, 8))  # Элемент не найден
+
+    def test_galloping_search_first_element(self):
+        array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        bs = BinarySearch(array)
+        self.assertTrue(bs.GallopingSearch(array, 1))  # Первый элемент
+
+    def test_galloping_search_last_element(self):
+        array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        bs = BinarySearch(array)
+        self.assertTrue(bs.GallopingSearch(array, 19))  # Последний элемент
+
+    def test_galloping_search_single_element_found(self):
+        array = [42]
+        bs = BinarySearch(array)
+        self.assertTrue(bs.GallopingSearch(array, 42))  # Единственный элемент
+
+    def test_galloping_search_single_element_not_found(self):
+        array = [42]
+        bs = BinarySearch(array)
+        self.assertFalse(bs.GallopingSearch(array, 43))  # Элемент не найден
+
+    def test_galloping_search_large_array(self):
+        array = list(range(1, 1000000, 2))  # Большой массив нечетных чисел
+        bs = BinarySearch(array)
+        self.assertTrue(bs.GallopingSearch(array, 999999))  # Последний элемент
+        self.assertFalse(bs.GallopingSearch(array, 1000000))  # Элемент не найден
+        
     def test_Hard(self):
         search = BinarySearch([4])
         search.Step(3)
