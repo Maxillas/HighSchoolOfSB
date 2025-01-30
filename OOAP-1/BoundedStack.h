@@ -1,5 +1,8 @@
 #include <list>
 
+//Рефлексия:
+//1. Добавил метод, возвращающий максимальный размер стека - не учел при первой реализации
+
 
 template <typename T>
 class BoundedStack {
@@ -71,6 +74,10 @@ public:
 
     int size() {
         return m_stack.size();
+    }
+
+    int max_size() {
+        return m_limit;
     }
 
     POP_STATUS getPopStatus() {
