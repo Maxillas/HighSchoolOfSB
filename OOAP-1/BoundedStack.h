@@ -1,11 +1,13 @@
 #include <list>
+#include <optional>
 
 //Рефлексия:
 //1. Добавил метод, возвращающий максимальный размер стека - не учел при первой реализации
+//2. Добавил промежуточный абстрактный класс и отнаследовался от него
 
 
 template <typename T>
-class BoundedStack {
+class IBoundedStack {
 
 public:
     enum class POP_STATUS {
@@ -26,14 +28,34 @@ public:
         PUSH_ERR
     };
 
+    IBoundedStack() = delete;
+    IBoundedStack(int limit){};
+
+    void push(T value) = 0;
+    void pop() = 0;
+    void clear() = 0;
+    T peek() = 0;
+
+    int size() = 0;
+    int max_size() = 0;
+
+    POP_STATUS getPopStatus() = 0;
+    PEEK_STATUS getPeekStatus() = 0;
+    PUSH_STATUS getPushStatus() = 0;
+
+};
+
+
+template <typename T>
+class BoundedStack : public IBoundedStack<T> {
+
+public:
+
     BoundedStack() = delete;
-    BoundedStack(int limit = 32){
+    BoundedStack(int limit = 32)
+    {
         m_limit = limit;
     }
-
-    // запросы статусов
-    POP_STATUS get_pop_status() {return m_popStatus;}
-    PEEK_STATUS get_peek_status() {return m_peekStatus;}
 
     void push(T value) {
         if(m_stack.size() == m_limit) {
@@ -61,10 +83,10 @@ public:
     }
 
     T peek() {
-        T result = 0;
+        T result;
         if(m_stack.size() <= 0) {
             m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_ERR;
-            result = 0;
+            result = std::nullopt;
         } else {
             m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_OK;
             result = m_stack.back();
@@ -80,24 +102,24 @@ public:
         return m_limit;
     }
 
-    POP_STATUS getPopStatus() {
+    IBoundedStack<T>::POP_STATUS getPopStatus() {
         return m_popStatus;
     }
 
-    PEEK_STATUS getPeekStatus() {
+    IBoundedStack<T>::PEEK_STATUS getPeekStatus() {
         return m_peekStatus;
     }
 
-    PUSH_STATUS getPushStatus() {
+    IBoundedStack<T>::PUSH_STATUS getPushStatus() {
         return m_pushStatus;
     }
 
 private:
     std::list<T> m_stack;
     int m_limit = 0;
-    POP_STATUS m_popStatus = BoundedStack::POP_STATUS::POP_NIL;
-    PEEK_STATUS m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_NIL;
-    PUSH_STATUS m_pushStatus = BoundedStack::PUSH_STATUS::PUSH_NIL;
+    IBoundedStack<T>::POP_STATUS m_popStatus = BoundedStack::POP_STATUS::POP_NIL;
+    IBoundedStack<T>::PEEK_STATUS m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_NIL;
+    IBoundedStack<T>::PUSH_STATUS m_pushStatus = BoundedStack::PUSH_STATUS::PUSH_NIL;
 
 };
 
