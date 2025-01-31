@@ -102,24 +102,24 @@ public:
         return m_limit;
     }
 
-    IBoundedStack<T>::POP_STATUS getPopStatus() {
+    typename IBoundedStack<T>::POP_STATUS getPopStatus() {
         return m_popStatus;
     }
 
-    IBoundedStack<T>::PEEK_STATUS getPeekStatus() {
+    typename IBoundedStack<T>::PEEK_STATUS getPeekStatus() {
         return m_peekStatus;
     }
 
-    IBoundedStack<T>::PUSH_STATUS getPushStatus() {
+    typename IBoundedStack<T>::PUSH_STATUS getPushStatus() {
         return m_pushStatus;
     }
 
 private:
     std::list<T> m_stack;
     int m_limit = 0;
-    IBoundedStack<T>::POP_STATUS m_popStatus = BoundedStack::POP_STATUS::POP_NIL;
-    IBoundedStack<T>::PEEK_STATUS m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_NIL;
-    IBoundedStack<T>::PUSH_STATUS m_pushStatus = BoundedStack::PUSH_STATUS::PUSH_NIL;
+    typename IBoundedStack<T>::POP_STATUS m_popStatus = BoundedStack::POP_STATUS::POP_NIL;
+    typename IBoundedStack<T>::PEEK_STATUS m_peekStatus = BoundedStack::PEEK_STATUS::PEEK_NIL;
+    typename IBoundedStack<T>::PUSH_STATUS m_pushStatus = BoundedStack::PUSH_STATUS::PUSH_NIL;
 
 };
 
