@@ -298,7 +298,7 @@ public:
         this->m_currentNode = this->m_currentNode->prev;
     };
 
-    LEFT_STATUS getRightStatus() {
+    LEFT_STATUS getLeftStatus() {
         return m_leftStatus;
     };
 private:
