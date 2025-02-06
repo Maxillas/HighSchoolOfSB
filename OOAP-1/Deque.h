@@ -1,78 +1,87 @@
-#include "vector"
+#include "Queue.h"
 
 template <typename T>
-class Queue
+class ParentQueue : public IQueue<T>
 {
 public:
-    enum class DEQ_STATUS {
-        DEQ_NIL,
-        DEQ_OK,
-        DEQ_ERR
+
+    ParentQueue(){};
+    virtual ~ParentQueue() = 0;
+
+    void addTail(T itm) {
+        this->m_size++;
+        this->m_queue.push_back(itm);
     };
 
-    enum class PEEK_STATUS {
-        PEEK_NIL,
-        PEEK_OK,
-        PEEK_ERR
-    };
-
-    // Конструктор
-    // постусловие: создана новая пустая очередь
-    Queue(){};
-
-    virtual ~Queue() = 0;
-
-    // постусловие: добавлен новый элемент в очередь
-    void enqueue(T itm) {
-        m_size++;
-        m_queue.push_back(itm);
-    };
-
-    // предусловие: очередь не пустая
-    // постусловие: удален один элемент из очереди
-    T dequeue() {
-        if(m_size == 0) {
-            m_deqStatus = DEQ_STATUS::DEQ_ERR;
+    T removeTail() {
+        if(this->m_size == 0) {
+            m_deqStatus = IQueue<T>::DEQ_STATUS::DEQ_ERR;
             return T();
         }
 
-        m_deqStatus = DEQ_STATUS::DEQ_OK;
-        m_size--;
-        auto result = m_queue[m_queue.end() - 1];
-        m_queue.pop_back();
+        m_deqStatus = IQueue<T>::DEQ_STATUS::DEQ_OK;
+        this->m_size--;
+        auto result = this->m_queue[this->m_queue.end() - 1];
+        this->m_queue.pop_back();
         return result;
     };
 
-    // предусловие: очередь не пустая
-    // постусловие: возвращен один элемент из очереди, но не удаляет
-    T peek() {
-        if(m_size == 0) {
-            m_deqStatus = DEQ_STATUS::DEQ_ERR;
+    T peekTail() {
+        if(this->m_size == 0) {
+            m_deqStatus = IQueue<T>::DEQ_STATUS::DEQ_ERR;
             return T();
         }
 
-        m_deqStatus = DEQ_STATUS::DEQ_OK;
-        return m_queue[m_queue.end() - 1];
+        m_deqStatus = IQueue<T>::DEQ_STATUS::DEQ_OK;
+        return this->m_queue[this->m_queue.end() - 1];
     };
 
     int size() {
-        return m_size;
+        return this->m_size;
     };
 
-    DEQ_STATUS getDeqStatus() const {
+    IQueue<T>::DEQ_STATUS getDeqStatus() const {
         return m_deqStatus;
     };
-    PEEK_STATUS getPeekStatus() const {
+    IQueue<T>::PEEK_STATUS getPeekStatus() const {
         return m_peekStatus;
     };
 
 private:
-    int m_size;
-    std::vector<T> m_queue;
 
-    DEQ_STATUS m_deqStatus = DEQ_STATUS::DEQ_NIL;
-    PEEK_STATUS m_peekStatus = PEEK_STATUS::PEEK_NIL;
+    IQueue<T>::DEQ_STATUS m_deqStatus = IQueue<T>::DEQ_STATUS::DEQ_NIL;
+    IQueue<T>::PEEK_STATUS m_peekStatus = IQueue<T>::PEEK_STATUS::PEEK_NIL;
 };
 
+template <typename T>
+class Queue : public ParentQueue<T>
+{
+    // Конструктор
+    // постусловие: создана новая пустая очередь
+    Queue(){};
+    virtual ~Queue() = 0;
+};
+
+template <typename T>
+class DeQueue : public ParentQueue<T>
+{
+public:
+    // Конструктор
+    // постусловие: создана новая пустая двунаправленная очередь
+    DeQueue(){};
+
+    virtual ~DeQueue() = 0;
+
+    // постусловие: добавлен новый элемент в очередь, все остальные смещены
+    void addFront(T itm);
+
+    // предусловие: очередь не пустая
+    // постусловие: удален один элемент из начала очереди
+    T removeFront();
+
+    // предусловие: очередь не пустая
+    // постусловие: возвращен один элемент из начала очереди, но не удален
+    T peekFront();
+};
 
 

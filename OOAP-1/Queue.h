@@ -1,7 +1,7 @@
 #include "vector"
 
 template <typename T>
-class Queue
+class IQueue
 {
 public:
     enum class DEQ_STATUS {
@@ -18,53 +18,25 @@ public:
 
     // Конструктор
     // постусловие: создана новая пустая очередь
-    Queue(){};
+    IQueue(){};
 
-    virtual ~Queue() = 0;
+    virtual ~IQueue() = 0;
 
     // постусловие: добавлен новый элемент в очередь
-    void enqueue(T itm) {
-        m_size++;
-        m_queue.push_back(itm);
-    };
+    void addTail(T itm) = 0;
 
     // предусловие: очередь не пустая
-    // постусловие: удален один элемент из очереди
-    T dequeue() {
-        if(m_size == 0) {
-            m_deqStatus = DEQ_STATUS::DEQ_ERR;
-            return T();
-        }
-
-        m_deqStatus = DEQ_STATUS::DEQ_OK;
-        m_size--;
-        auto result = m_queue[m_queue.end() - 1];
-        m_queue.pop_back();
-        return result;
-    };
+    // постусловие: удален один элемент из конца очереди
+    T removeTail() = 0;
 
     // предусловие: очередь не пустая
-    // постусловие: возвращен один элемент из очереди, но не удаляет
-    T peek() {
-        if(m_size == 0) {
-            m_deqStatus = DEQ_STATUS::DEQ_ERR;
-            return T();
-        }
+    // постусловие: возвращен один элемент из конца очереди, но не удален
+    T peekTail() = 0;
 
-        m_deqStatus = DEQ_STATUS::DEQ_OK;
-        return m_queue[m_queue.end() - 1];
-    };
+    int size() = 0;
 
-    int size() {
-        return m_size;
-    };
-
-    DEQ_STATUS getDeqStatus() const {
-        return m_deqStatus;
-    };
-    PEEK_STATUS getPeekStatus() const {
-        return m_peekStatus;
-    };
+    virtual DEQ_STATUS getDeqStatus() const = 0;
+    virtual PEEK_STATUS getPeekStatus() const = 0;
 
 private:
     int m_size;
