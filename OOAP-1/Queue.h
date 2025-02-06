@@ -1,19 +1,19 @@
-#include "vector"
+#include "list"
 
 template <typename T>
 class IQueue
 {
 public:
-    enum class DEQ_STATUS {
-        DEQ_NIL,
-        DEQ_OK,
-        DEQ_ERR
+    enum class REMOVE_TAIL_STATUS {
+        REMOVE_TAIL_NIL,
+        REMOVE_TAIL_OK,
+        REMOVE_TAIL_ERR
     };
 
-    enum class PEEK_STATUS {
-        PEEK_NIL,
-        PEEK_OK,
-        PEEK_ERR
+    enum class PEEK_TAIL_STATUS {
+        PEEK_TAIL_NIL,
+        PEEK_TAIL_OK,
+        PEEK_TAIL_ERR
     };
 
     // Конструктор
@@ -35,15 +35,15 @@ public:
 
     int size() = 0;
 
-    virtual DEQ_STATUS getDeqStatus() const = 0;
-    virtual PEEK_STATUS getPeekStatus() const = 0;
+    virtual REMOVE_TAIL_STATUS getRemoveTailStatus() const = 0;
+    virtual PEEK_TAIL_STATUS getPeekTailStatus() const = 0;
 
 private:
     int m_size;
-    std::vector<T> m_queue;
+    std::list<T> m_queue;
 
-    DEQ_STATUS m_deqStatus = DEQ_STATUS::DEQ_NIL;
-    PEEK_STATUS m_peekStatus = PEEK_STATUS::PEEK_NIL;
+    REMOVE_TAIL_STATUS m_removeTailStatus = REMOVE_TAIL_STATUS::DEQ_NIL;
+    PEEK_TAIL_STATUS m_peekTailStatus = PEEK_TAIL_STATUS::PEEK_NIL;
 };
 
 
