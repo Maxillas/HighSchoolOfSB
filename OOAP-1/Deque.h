@@ -1,3 +1,9 @@
+// Рефлексия:
+// 1. Ошибся с реализацией, сделал в базовой очереди добавление в хвост и удаление из хвоста
+// что противоречит концепции очереди, надо добавлять в хвост, а удалять из головы.
+// 2. Аналогичная ошибка с методом peek - надо возвращать элемент из головы
+
+
 #include "Queue.h"
 
 template <typename T>
@@ -13,44 +19,40 @@ public:
         this->m_queue.push_back(itm);
     };
 
-    T removeTail() {
+    T removeFront() {
         if(this->m_size == 0) {
-            m_deqStatus = IQueue<T>::REMOVE_TAIL_STATUS::REMOVE_TAIL_ERR;
+            this->m_removeFrontStatus = IQueue<T>::REMOVE_FRONT_STATUS::REMOVE_FRONT_ERR;
             return T();
         }
 
-        m_deqStatus = IQueue<T>::REMOVE_TAIL_STATUS::REMOVE_TAIL_OK;
+        this->m_removeFrontStatus = IQueue<T>::REMOVE_FRONT_STATUS::REMOVE_FRONT_OK;
         this->m_size--;
-        auto result = this->m_queue[this->m_queue.end() - 1];
-        this->m_queue.pop_back();
+        auto result = this->m_queue.front();
+        this->m_queue.pop_front();
         return result;
     };
 
-    T peekTail() {
+    T peekFront() {
         if(this->m_size == 0) {
-            m_deqStatus = IQueue<T>::PEEK_TAIL_STATUS::PEEK_TAIL_ERR;
+            this->m_peekFrontStatus = IQueue<T>::PEEK_FRONT_STATUS::PEEK_FRONT_ERR;
             return T();
         }
 
-        m_deqStatus = IQueue<T>::PEEK_TAIL_STATUS::PEEK_TAIL_OK;
-        return this->m_queue.back();
+        this->m_peekFrontStatus = IQueue<T>::PEEK_FRONT_STATUS::PEEK_FRONT_OK;
+        this->m_size--;
+        return this->m_queue.front();
     };
 
     int size() {
         return this->m_size;
     };
 
-    IQueue<T>::DEQ_STATUS getDeqStatus() const {
-        return m_deqStatus;
+    IQueue<T>::REMOVE_FRONT_STATUS getRemoveFrontStatus() const {
+        return this->m_removeTailStatus;
     };
-    IQueue<T>::PEEK_STATUS getPeekStatus() const {
-        return m_peekStatus;
+    IQueue<T>::PEEK_FRONT_STATUS getPeekFrontStatus() const {
+        return this->m_peekTailStatus;
     };
-
-private:
-
-    IQueue<T>::REMOVE_TAIL_STATUS m_deqStatus = IQueue<T>::REMOVE_TAIL_STATUS::REMOVE_TAIL_NIL;
-    IQueue<T>::PEEK_TAIL_STATUS m_peekStatus = IQueue<T>::PEEK_TAIL_STATUS::PEEK_TAIL_NIL;
 };
 
 template <typename T>
@@ -66,16 +68,16 @@ template <typename T>
 class DeQueue : public ParentQueue<T>
 {
 public:
-    enum class REMOVE_FRONT_STATUS {
-        REMOVE_FRONT_NIL,
-        REMOVE_FRONT_OK,
-        REMOVE_FRONT_ERR
+    enum class REMOVE_TAIL_STATUS {
+        REMOVE_TAIL_NIL,
+        REMOVE_TAIL_OK,
+        REMOVE_TAIL_ERR
     };
 
-    enum class PEEK_FRONT_STATUS {
-        PEEK_FRONT_NIL,
-        PEEK_FRONT_OK,
-        PEEK_FRONT_ERR
+    enum class PEEK_TAIL_STATUS {
+        PEEK_TAIL_NIL,
+        PEEK_TAIL_OK,
+        PEEK_TAIL_ERR
     };
     // Конструктор
     // постусловие: создана новая пустая двунаправленная очередь
@@ -88,44 +90,43 @@ public:
     };
 
     // предусловие: очередь не пустая
-    // постусловие: удален один элемент из начала очереди
-    T removeFront() {
+    // постусловие: удален один элемент из конца очереди
+    T removeTail() {
         if(this->m_size == 0) {
-            m_removeFrontStatus = REMOVE_FRONT_STATUS::REMOVE_FRONT_ERR;
+            this->m_removeTailStatus = REMOVE_TAIL_STATUS::REMOVE_TAIL_ERR;
             return T();
         }
 
-        m_removeFrontStatus = REMOVE_FRONT_STATUS::REMOVE_FRONT_OK;
+        this->m_removeTailStatus = REMOVE_TAIL_STATUS::REMOVE_TAIL_OK;
         this->m_size--;
-        auto result = this->m_queue.front();
-        this->m_queue.pop_front();
+        auto result = this->m_queue[this->m_queue.end() - 1];
+        this->m_queue.pop_back();
         return result;
     };
 
     // предусловие: очередь не пустая
-    // постусловие: возвращен один элемент из начала очереди, но не удален
-    T peekFront() {
+    // постусловие: возвращен один элемент из конца очереди, но не удален
+    T peekTail() {
         if(this->m_size == 0) {
-            m_peekFrontStatus = PEEK_FRONT_STATUS::PEEK_FRONT_ERR;
+            this->m_peekTailStatus = PEEK_TAIL_STATUS::PEEK_TAIL_ERR;
             return T();
         }
 
-        m_peekFrontStatus = PEEK_FRONT_STATUS::PEEK_FRONT_OK;
-        this->m_size--;
-        return this->m_queue.front();
+        this->m_peekTailStatus = PEEK_TAIL_STATUS::PEEK_TAIL_OK;
+        return this->m_queue.back();
     };
 
-    virtual REMOVE_FRONT_STATUS getRemoveFrontStatus() const {
-        return m_removeFrontStatus;
+    virtual REMOVE_TAIL_STATUS getRemoveTailStatus() const {
+        return m_removeTailStatus;
     };
-    virtual PEEK_FRONT_STATUS getPeekFrontStatus() const {
-        return m_peekFrontStatus;
+    virtual PEEK_TAIL_STATUS getPeekTailStatus() const {
+        return m_peekTailStatus;
     };
 
 private:
 
-    REMOVE_FRONT_STATUS m_removeFrontStatus = REMOVE_FRONT_STATUS::REMOVE_FRONT_NIL;
-    PEEK_FRONT_STATUS m_peekFrontStatus = PEEK_FRONT_STATUS::PEEK_FRONT_NIL;
+    REMOVE_TAIL_STATUS m_removeTailStatus = REMOVE_TAIL_STATUS::REMOVE_TAIL_NIL;
+    PEEK_TAIL_STATUS m_peekTailStatus = PEEK_TAIL_STATUS::PEEK_TAIL_NIL;
 };
 
 
