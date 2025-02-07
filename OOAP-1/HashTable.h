@@ -1,5 +1,10 @@
 #include "vector"
 
+// Рефлексия
+// 1. В методе put не корректно описал предусловие
+// 2. Не учел метод get, который можно реализовать через find
+// 3. Не учел метод remove, удаляющий элемент из таблица
+
 template <typename T>
 class HashTable
 {
@@ -8,6 +13,12 @@ public:
         PUT_NIL,
         PUT_OK,
         PUT_ERR
+    };
+
+    enum class REMOVE_STATUS {
+        REMOVE_NIL,
+        REMOVE_OK,
+        REMOVE_ERR
     };
 
     enum class FIND_STATUS {
@@ -35,7 +46,7 @@ public:
     };
 
 
-    // предусловие: внутреннее хранилище не заполнено полностью
+    // предусловие: в таблице имеется свободный слот
     // постусловие: в таблицу добавлен новый элемент
     void put(T itm) {
         auto index = seekSlot(itm);
@@ -47,26 +58,25 @@ public:
         m_putStatus == PUT_STATUS::PUT_OK;
     };
 
-    // предусловие: внутреннее хранилище содержит искомый элемент
-    // постусловие: возвращен искомый элемент
-    T find(T itm) {
+    // предусловие: в таблице имеется значение itm
+    // постусловие: из таблци удален элемент itm
+    void remove(T itm) {
         auto index = hashFun(itm);
-        int count = 0;
-        while(*m_table[index] != itm) {
-            index++;
-            if(index > m_size - 1) {
-                index = index % m_size;
-                count++;
-                continue;
-            }
-            if(count == 5) {
-                m_findStatus = FIND_STATUS::FIND_ERR;
-                return T();
-            }
+
+        if(m_table[index] == nullptr) {
+            m_removeStatus == REMOVE_STATUS::REMOVE_ERR;
+            return;
         }
-        m_findStatus = FIND_STATUS::FIND_OK;
-        return *m_table[index];
-    };
+        m_table[index] = nullptr;
+    }
+
+    bool get(T itm) {
+        find(itm);
+        if(m_findStatus == FIND_STATUS::FIND_ERR) {
+            return false;
+        }
+        return true;
+    }
 
     // постусловие: возвращает текущий размер таблицы
     int size() {
@@ -75,6 +85,10 @@ public:
 
     virtual PUT_STATUS getPutStatus() const {
         return m_putStatus;
+    };
+
+    virtual REMOVE_STATUS getRemoveStatus() const {
+        return m_removeStatus;
     };
     virtual FIND_STATUS getFindStatus() const {
         return m_findStatus;
@@ -116,7 +130,29 @@ private:
 
     };
 
+    // предусловие: внутреннее хранилище содержит искомый элемент
+    // постусловие: возвращен искомый элемент
+    T find(T itm) {
+        auto index = hashFun(itm);
+        int count = 0;
+        while(*m_table[index] != itm) {
+            index++;
+            if(index > m_size - 1) {
+                index = index % m_size;
+                count++;
+                continue;
+            }
+            if(count == 5) {
+                m_findStatus = FIND_STATUS::FIND_ERR;
+                return T();
+            }
+        }
+        m_findStatus = FIND_STATUS::FIND_OK;
+        return *m_table[index];
+    };
+
     PUT_STATUS m_putStatus = PUT_STATUS::PUT_NIL;
+    REMOVE_STATUS m_removeStatus = REMOVE_STATUS::REMOVE_NIL;
     FIND_STATUS m_findStatus = FIND_STATUS::FIND_NIL;
     SEEK_STATUS m_seekStatus = SEEK_STATUS::SEEK_NIL;
 };
