@@ -62,8 +62,7 @@ private:
     int m_count;
     int m_capacity; //=16
     T* m_array = nullptr; //указатель на начало массива
-
-    void resize(int newCapacity) = 0;
+   void resize(int newCapacity) = 0;
 
     GET_STATUS m_getStatus = GET_STATUS::GET_NIL;
     INSERT_STATUS m_insertStatus = INSERT_STATUS::INSERT_NIL;
