@@ -1,6 +1,9 @@
 #include "HashTable.h"
 #include <string>
 
+// Рефлексия
+// 1. Не учел в описании метода put, что значение перезаписывается при совпадении
+// 2. Добавил в конструктор размер словаря - избыточно, должен быть динамическим
 template <typename T>
 class NativeDictionary
 {
@@ -26,13 +29,14 @@ public:
 
     // Конструктор
     // постусловие: создан новый пустой словарь размером size
-    NativeDictionary(int size){
-        m_size = size;
+    NativeDictionary(){
+        m_size = 2;
         m_slots = new std::vector<T>(m_size, nullptr);
         m_values = new std::vector<T>(m_size, nullptr);
     };
 
     // постусловие: в словарь добавлен элемент с ключом key
+    // значение перезаписано, если по этому ключу уже есть элемент
     void put(std::string key, T value) {
         auto index = hashFoo(key);
         m_size++;
