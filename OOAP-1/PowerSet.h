@@ -10,25 +10,51 @@ public:
         HashTable<T>(maxSize)
     {};
 
-    virtual ~PowerSet() = 0;
-
-    // предусловие: в множестве имеется свободный слот
-    // предусловие: в множестве нет такого элемента
-    // постусловие: в множество добавлен новый элемент
-    void put(T itm) override {
-        auto index = seekSlot(itm);
-        if(this->m_seekStatus == HashTable<T>::SEEK_STATUS::SEEK_ERR) {
-            this->m_putStatus == HashTable<T>::PUT_STATUS::PUT_ERR;
-            return;
-        }
-        for(const auto& item : this->m_table) {
-            if(this->m_table[index] == itm) {
-                this->m_putStatus == HashTable<T>::PUT_STATUS::PUT_ERR;
-                return;
+    PowerSet<T> Intersection(PowerSet<T> set) {
+        PowerSet<T> output(this->m_size);
+        for (const auto& i : this->m_table) {
+            if (set.get(i)) {
+                output.put(i);
             }
         }
-        this->m_table[index] = itm;
-        this->m_putStatus == HashTable<T>::PUT_STATUS::PUT_OK;
-    };
+        return output;
+    }
+
+    PowerSet<T> Union(PowerSet<T> set) {
+        PowerSet<T> output(this->m_size);
+        if(set.size() == 0) {
+            return *this;
+        }
+        for (const auto& i : this->m_table) {
+            output.put(i);
+        }
+        for (const auto& i : set->m_table) {
+            output.put(i);
+        }
+        return output;
+    }
+
+    PowerSet<T> Difference(PowerSet<T> set) {
+        PowerSet<T> output(this->m_size);
+        for (const auto& i : this->m_table) {
+            output.put(i);
+        }
+        for (const auto& i : set->m_table) {
+            if(this->get(i)) {
+                output.remove(i);
+            }
+        }
+        return output;
+    }
+
+    bool isSubset(PowerSet<T> set) {
+        PowerSet<T> tmp(this->m_size);
+        for (const auto& i : set->m_table) {
+            if(!tmp.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
