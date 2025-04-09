@@ -3,27 +3,27 @@
 
 class General {
 public:
-    virtual void print() = 0;
+	virtual void print() = 0;
 };
 
 class Any : virtual public General {
 public:
-    void print() override {
-        std::cout << "copy from Any" << std::endl;
-    }
-    void anySpecific() {
+	void print() override {
+		std::cout << "copy from Any" << std::endl;
+	}
+	void anySpecific() {
 		std::cout << "From Any" << std::endl;
-    }
+	}
 };
 
 class Other : virtual public General {
 public:
-    void print() override {
-        std::cout << "copy from Other" << std::endl;
-    }
-    void otherSpecific() {
+	void print() override {
+		std::cout << "copy from Other" << std::endl;
+	}
+	void otherSpecific() {
 		std::cout << "From Other" << std::endl;
-    }
+	}
 };
 
 //Добавили виртуальное наследование, чтобы избежать неоднозначности при вызове метода через указатель на None
