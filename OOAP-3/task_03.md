@@ -14,5 +14,4 @@
 12. FieldGenerator - генератор поля
 13. UserInterfase - интерфейс пользователя
 14. User - пользователь
-15. StepHistory - информация о шагах игрока
-16. GameLogic - игровая логика
+15. GameLogic - игровая логика
