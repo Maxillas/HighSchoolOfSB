@@ -30,10 +30,10 @@ Cell *GameField::getCell(Coordinates coordinates)
 Cell *GameField::getCell(int index)
 {
 	if (index < 0 || index >= static_cast<int>(m_field.size())) {
-        std::cout << "Invalid cell index" << std::endl;
-        return nullptr;
-    }
-    return m_field[index];
+		std::cout << "Invalid cell index" << std::endl;
+		return nullptr;
+	}
+	return m_field[index];
 }
 
 size_t GameField::size() const

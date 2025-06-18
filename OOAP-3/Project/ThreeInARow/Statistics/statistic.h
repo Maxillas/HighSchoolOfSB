@@ -7,15 +7,15 @@
 class Statistic
 {
 public:
-    void addStep(const Step& step);
+	void addStep(const Step& step);
 
-    void addScore(int score);
+	void addScore(int score);
 
-    int totalScore() const;
+	int totalScore() const;
 
 private:
-    std::list<Step> m_steps;
-    int m_totalScore = 0;
+	std::list<Step> m_steps;
+	int m_totalScore = 0;
 };
 
 #endif // STATISTIC_H

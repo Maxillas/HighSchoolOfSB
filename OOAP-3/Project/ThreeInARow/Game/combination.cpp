@@ -29,7 +29,7 @@ int Combination::search(GameField *field)
 void Combination::findCombination(Cell *cell, int type, std::vector<Cell *> &combination, std::vector<bool> &processed)
 {
 	if (!cell || processed[cell->coordinates().y() * m_cols + cell->coordinates().x()])
-            return;
+		return;
 
 	if (cell->type() == type) {
 		combination.push_back(cell);

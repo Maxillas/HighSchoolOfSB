@@ -12,8 +12,8 @@ public:
 
 private:
 	void findCombination(Cell* cell, int type,
-                        std::vector<Cell*>& combination,
-                        std::vector<bool>& processed);
+					std::vector<Cell*>& combination,
+					std::vector<bool>& processed);
 	int calculateScore(int count);
 	int m_cols;
 };

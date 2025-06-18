@@ -5,14 +5,14 @@
 
 class BonusSet {
 public:
-    void add(const std::shared_ptr<IBonus>& bonus);
+	void add(const std::shared_ptr<IBonus>& bonus);
 
-    void use(const std::string& name);
+	void use(const std::string& name);
 
-    const std::list<std::shared_ptr<IBonus>>& all() const;
+	const std::list<std::shared_ptr<IBonus>>& all() const;
 
 private:
-    std::list<std::shared_ptr<IBonus>> m_bonuses;
+	std::list<std::shared_ptr<IBonus>> m_bonuses;
 };
 
 #endif // BONUSSET_H

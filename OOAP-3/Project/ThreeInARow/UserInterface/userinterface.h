@@ -7,18 +7,18 @@
 
 class IUserInterface {
 public:
-    virtual void displayField(GameField* field) = 0;
-    virtual std::pair<Cell*, Cell*> getMoveInput(GameField* field) = 0; // Добавили параметр field
-    virtual void displayMessage(const std::string& msg) = 0;
+	virtual void displayField(GameField* field) = 0;
+	virtual std::pair<Cell*, Cell*> getMoveInput(GameField* field) = 0; // Добавили параметр field
+	virtual void displayMessage(const std::string& msg) = 0;
 };
 
 class ConsoleUI : public IUserInterface {
 public:
-    void displayField(GameField* field) override;
+	void displayField(GameField* field) override;
 
-    std::pair<Cell*, Cell*> getMoveInput(GameField* field) override;
+	std::pair<Cell*, Cell*> getMoveInput(GameField* field) override;
 
-    void displayMessage(const std::string& msg) override;
+	void displayMessage(const std::string& msg) override;
 };
 
 #endif // USERINTERFACE_H

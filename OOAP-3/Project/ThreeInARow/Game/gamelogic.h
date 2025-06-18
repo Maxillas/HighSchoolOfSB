@@ -8,7 +8,7 @@ class GameLogic
 public:
 	GameLogic();
 	bool isValidMove(Cell* from, Cell* to);
-    void swapCells(Cell* a, Cell* b);
+	void swapCells(Cell* a, Cell* b);
 };
 
 #endif // GAMELOGIC_H

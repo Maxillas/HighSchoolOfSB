@@ -9,7 +9,7 @@ class StepHistory
 public:
 	void add(const Step& step);
 private:
-    std::list<Step> m_history;
+	std::list<Step> m_history;
 };
 
 #endif // STEPHISTORY_H

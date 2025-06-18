@@ -12,8 +12,8 @@ public:
 	int y();
 
 	bool operator==(const Coordinates& other) const {
-        return (m_x == other.m_x) && (m_y == other.m_y);
-    }
+		return (m_x == other.m_x) && (m_y == other.m_y);
+	}
 
 private:
 	int m_x = 0;

@@ -13,7 +13,7 @@ public:
 	void addNeighbor(Cell* cell);
 
 	int type() const;
-    void setType(int type);
+	void setType(int type);
 
 
 private:
