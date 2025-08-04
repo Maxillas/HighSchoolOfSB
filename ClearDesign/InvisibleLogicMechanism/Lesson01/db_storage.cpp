@@ -84,14 +84,12 @@ private:
     sqlite3* db;
     const char* db_name = "storage.db";
 
-    // Вспомогательная функция для проверки ошибок SQLite
     void checkError(int rc, const char* operation) {
         if (rc != SQLITE_OK) {
             std::cerr << "SQLite error during " << operation << ": " << sqlite3_errmsg(db) << std::endl;
         }
     }
 
-    // Инициализация таблицы
     void initTable() {
         const char* sql = R"(
                 CREATE TABLE IF NOT EXISTS data (
