@@ -9,11 +9,21 @@ public:
 	BankAccount(double balance) {
 		m_balance = balance;
 	};
-	void deposit(double newMoney) {
-		m_balance += newMoney;
+	void deposit(double amount) {
+		if (amount < 0) {
+			throw std::invalid_argument("Deposit amount cannot be negative");
+		}
+		m_balance += amount;
 	}
-	void withdraw(double withdraw) {
-		m_balance -= withdraw;
+
+	void withdraw(double amount) {
+		if (amount < 0) {
+			throw std::invalid_argument("Withdrawal amount cannot be negative");
+		}
+		if (amount > m_balance) {
+			throw std::runtime_error("Insufficient funds");
+		}
+		m_balance -= amount;
 	}
 	double getBalance() {
 		return m_balance;
@@ -50,8 +60,36 @@ public:
 		resetAccount(500);
 		return assertEqual(500, m_bankAcc->getBalance(), "testInitialBalance");
 	}
+	bool testNegativeDeposit() {
+		resetAccount(100);
+		try {
+			m_bankAcc->deposit(-50);
+			return false; // Should not reach here
+		} catch (const std::invalid_argument&) {
+			return assertEqual(100, m_bankAcc->getBalance(), "testNegativeDeposit");
+		}
+	}
+	bool testOverdraft() {
+		resetAccount(100);
+		try {
+			m_bankAcc->withdraw(150);
+			return false; // Should not reach here
+		} catch (const std::runtime_error&) {
+			return assertEqual(100, m_bankAcc->getBalance(), "testOverdraft");
+		}
+	}
+	void runAllTests() {
+		std::cout << "Running tests...\n";
+		bool allPassed = true;
 
+		allPassed &= testDeposit();
+		allPassed &= testWithdraw();
+		allPassed &= testNegativeDeposit();
+		allPassed &= testOverdraft();
+		allPassed &= testInitialBalance();
 
+		std::cout << (allPassed ? "ALL TESTS PASSED" : "SOME TESTS FAILED") << "\n";
+	}
 
 private:
 	BankAccount* m_bankAcc = nullptr;
@@ -77,6 +115,9 @@ private:
 
 int main()
 {
-	cout << "Hello World!" << endl;
+	BankAccount account(0);
+	TestBankAccount tester(account);
+	tester.runAllTests();
 	return 0;
 }
+
