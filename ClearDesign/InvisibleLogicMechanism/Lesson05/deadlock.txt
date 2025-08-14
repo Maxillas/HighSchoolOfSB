@@ -1,120 +1,38 @@
-#include <iostream>
-#include "list"
 
-using namespace std;
+1. Итого значение может быть невереным по следующим причинам: происходит увеличение одного и того же ресурса сразу всеми потоками, 
+таким образом один поток может принять не 0 (как было изначально), а например 7 (после частичного увеличения в другом потоке) и так для каждого.
+Либо же два потока могут одновременно увеличить исходное число и тем самым пропустят одну итерацию инкремента.
+Решение: использовать атомарную операцию
 
+std::atomic<int> counter{0};  // Атомарный счётчик
 
-class GradeCalculator {
-
-public:
-	GradeCalculator() {};
-
-	double calculateAverage(const std::list<double>& grades) {
-		double gradeSum = 0;
-		if(grades.empty()) return gradeSum;
-		for(const auto& grade : grades) {
-			if(grade < 0) {
-				std::cout << "Ошибка во входных данных";
-				continue;
-			}
-			gradeSum += grade;
-		}
-		return gradeSum / grades.size();
-	}
-
-};
-
-
-class TestGradeCalculator {
-public:
-    TestGradeCalculator() {}
-    ~TestGradeCalculator() {
-        if (m_calculator) delete m_calculator;
+void incrementCounter() {
+    for (int j = 0; j < 100000; j++) {
+        counter++;  // Атомарный инкремент
     }
+}
 
-    bool testBasicAverage() {
-        resetCalculator();
-        std::list<double> numbers = {1.1, 2.3, 3.4, 4.6, 5.8};
-        return assertEqual(3.44, m_calculator->calculateAverage(numbers), "testBasicAverage");
-    }
+2. Ошибка заключается в следующем: Thread 1 захватывает lock1 и пытается захватить lock2. 
+Thread 2 захватывает lock2 и пытается захватить lock1. Оба потока бесконечно ждут друг друга, потому что каждый держит один ресурс и не отпускает его.
+Для решения проблемы используем мьютексы и порядок и захвата:
 
-    bool testSingleElement() {
-        resetCalculator();
-        std::list<double> numbers = {1.1};
-        return assertEqual(1.1, m_calculator->calculateAverage(numbers), "testBasicAverage");
-    }
+std::mutex lock1;
+std::mutex lock2;
 
-    bool testNegativeNumbers() {
-        resetCalculator();
-        std::list<double> numbers = {-1, -2, -3, -4, -5};
-        return assertEqual(0.0, m_calculator->calculateAverage(numbers), "testNegativeNumbers");
-    }
+void thread1() {
+    std::lock(lock1, lock2);  // Захватываем оба мьютекса атомарно
+    std::lock_guard<std::mutex> guard1(lock1, std::adopt_lock);  // Управляем освобождением
+    std::lock_guard<std::mutex> guard2(lock2, std::adopt_lock);
 
-    bool testMixedNumbers() {
-        resetCalculator();
-        std::list<double> numbers = {-2, 0, 2};
-        return assertEqual(0.0, m_calculator->calculateAverage(numbers), "testMixedNumbers");
-    }
+    std::cout << "Thread 1 acquired lock1 and lock2" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+}
 
-    bool testEmptyList() {
-        resetCalculator();
-        std::list<double> numbers = {};
-        return assertEqual(0.0, m_calculator->calculateAverage(numbers), "testMixedNumbers");
-    }
+void thread2() {
+    std::lock(lock1, lock2);
+    std::lock_guard<std::mutex> guard1(lock1, std::adopt_lock);
+    std::lock_guard<std::mutex> guard2(lock2, std::adopt_lock);
 
-    void runAllTests() {
-        std::cout << "Running AverageCalculator tests...\n";
-        bool allPassed = true;
-
-        allPassed &= testBasicAverage();
-        allPassed &= testSingleElement();
-        allPassed &= testNegativeNumbers();
-        allPassed &= testMixedNumbers();
-        allPassed &= testEmptyList();
-
-
-        std::cout << (allPassed ? "ALL TESTS PASSED" : "SOME TESTS FAILED") << "\n";
-    }
-
-private:
-    GradeCalculator* m_calculator = nullptr;
-
-    void resetCalculator() {
-        delete m_calculator;
-        m_calculator = new GradeCalculator();
-    }
-
-    template<typename T>
-    bool assertEqual(T expected, T actual, const std::string& testName) {
-        if (expected == actual) {
-            std::cout << "[PASS] " << testName << "\n";
-            return true;
-        }
-
-        std::cerr << "[FAIL] " << testName
-                  << " - Expected: " << expected
-                  << ", Actual: " << actual << "\n";
-        return false;
-    }
-
-    bool assertEqual(double expected, double actual, const std::string& testName) {
-        const double epsilon = 0.0001;
-        if (std::abs(expected - actual) < epsilon) {
-            std::cout << "[PASS] " << testName << "\n";
-            return true;
-        }
-
-        std::cerr << "[FAIL] " << testName
-                  << " - Expected: " << expected
-                  << ", Actual: " << actual << "\n";
-        return false;
-    }
-};
-
-
-int main()
-{
-	TestGradeCalculator tester;
-	tester.runAllTests();
-	return 0;
+    std::cout << "Thread 2 acquired lock1 and lock2" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
