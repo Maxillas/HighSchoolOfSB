@@ -5,9 +5,9 @@
 #include <vector>
 #include <algorithm>
 
-class Circle {
+class Circle final {
 private:
-	const double radius;
+	const double radius ;
 
 public:
 	static Circle create(double r) {
@@ -25,7 +25,7 @@ private:
 	Circle(double r) : radius(r) {}
 };
 
-class Rectangle {
+class Rectangle final {
 private:
 	const double width;
 	const double height;
