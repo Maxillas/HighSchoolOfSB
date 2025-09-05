@@ -1,31 +1,59 @@
-#include <iostream>
 #include <vector>
+#include <iostream>
 
+using namespace std;
 
-double findMax(std::vector<double> arr) {
-	double max = 0;
-	for(const double& num : arr) {
-		if(num > max) max = num;
-	}
-	return max;
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high]; 
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
 }
 
-// Доказательство корректности:
-//{arr.length > 0} findMax(arr) {result = max(arr)}
-// 1. Докажем корректность функции findMax
-// Инвариант цикла: max = maximum(arr[0..i-1]) ∧ 1 ≤ i ≤ arr.length
-// На каждой итерации цикла переменная max содержит максимально значение элемента массива
-// от 0 до i-1
-// 1. Первая итерация (инициализация)
-// max = arr[0]
-// i = 1 -> инвариант выполняется
-// Предположим: max = maximum(arr[0..k-1]) и 1 ≤ k ≤ arr.length
-// На k-й итерации сравниваем arr[k] с текущим max
-// Если arr[k] > max, то обновляем: max = arr[k]
-// Теперь max = maximum(arr[0..k])
-// Увеличиваем i = k + 1
-// Инвариант сохраняется: max = maximum(arr[0..(k+1)-1])
-// Цикл завершается, когда i = arr.length
-// Из инварианта: max = maximum(arr[0..arr.length-1])
-// Это означает: max = maximum(arr) - что и требовалось доказать
-// Постусловие выполняется
+void quickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+//Доказательство:
+// Предусловие для quickSort(arr, low, high): 
+
+// Тройка для partition:
+// { low ≤ high }
+// pi = partition(arr, low, high);
+// { 
+//   low ≤ pi ≤ high ∧
+//   (∀k ∈ [low, pi]) arr[k] ≤ arr[pi] ∧
+//   (∀k ∈ [pi+1, high]) arr[k] > arr[pi] ∧
+//   perm(arr_initial, arr_final, low, high)
+// }
+// Тройка для quickSort:
+// { 0 ≤ low ≤ high < arr.size() }
+// quickSort(arr, low, high);
+// { 
+//   sorted(arr, low, high) ∧
+//   perm(arr_initial, arr_final, low, high) ∧
+//   unchanged(arr, [0..low-1] ∪ [high+1..size-1])
+// }
+// Тройка для рекурсивных вызовов:
+// { sorted(arr, low, pi-1) ∧ sorted(arr, pi+1, high) ∧
+//   ∀i∈[low,pi-1], j∈[pi+1,high]: arr[i] ≤ arr[pi] ≤ arr[j] }
+// → { sorted(arr, low, high) }
+
+// На каждом шаге массив разбивается на меньшие подмассивы.
+// Размеры подмассивов строго уменьшаются.
+// Базовый случай (low >= high) всегда достигается.
+// Алгоритм завершается,
+// При завершении постусловие выполняется,
+// → quickSort полностью корректен относительно заданных пред- и постусловий. 
