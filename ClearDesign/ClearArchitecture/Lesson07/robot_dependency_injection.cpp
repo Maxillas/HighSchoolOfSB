@@ -14,6 +14,7 @@ struct RobotState {
 class IRobot {
 public:
 	virtual void transfer_to_cleaner() = 0;
+	virtual ~IRobot();
 	virtual RobotState move(const RobotState& state) = 0;
 	virtual RobotState turn(const RobotState& state) = 0;
 	virtual RobotState set_state(const RobotState& state) = 0;
@@ -23,8 +24,9 @@ public:
 };
 
 // Функциональная реализация чистильщика, ими	тируе	м
-class PureRobot : IRobot{
+class PureRobot : public IRobot{
 public:
+	PureRobot() : IRobot() {}
 	void transfer_to_cleaner() override;
 	RobotState move(const RobotState& state) override;
 	RobotState turn(const RobotState& state) override;
@@ -37,6 +39,12 @@ public:
 
 class Api {
 public:
+	Api() {
+		m_robot = new PureRobot();
+	}
+	~Api() {
+		delete m_robot;
+	}
 	void start() {
 		state = m_robot->start(state);
 	}
