@@ -2,7 +2,7 @@
 #include <sstream>
 #include <list>
 #include <cmath>
-
+z
 
 // Функциональная реализация чистильщика, имитируем
 class PureRobot {
