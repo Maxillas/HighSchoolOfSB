@@ -8,6 +8,10 @@ struct RobotState {
     int direction = 0; // 0: вверх, 1: вправо, 2: вниз, 3: влево
     bool is_cleaning = false;
     int cleaner_state = 0;
+    bool operator==(RobotState other) {
+		if(other.x == x) return true;
+		return false;
+    }
 };
 
 class IRobot {
@@ -23,7 +27,7 @@ public:
 };
 
 // Функциональная реализация чистильщика, имитируем
-class PureRobot : IRobot{
+class PureRobot : public IRobot{
 public:
 	void transfer_to_cleaner() override;
 	RobotState move(const RobotState& state) override;
