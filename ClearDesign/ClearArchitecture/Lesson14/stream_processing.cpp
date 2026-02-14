@@ -5,6 +5,11 @@
 #include <memory>
 #include <functional>
 
+// есть события-запросы (MoveRequested) и события-результаты (RobotMoved)
+// CommandHandler только генерирует события-запросы, не содержит логики
+// EventStore с подписками уведомляет процессоры о новых событиях
+// из событий-результатов можно восстановить текущее состояние робота
+
 
 struct Event {
 	virtual ~Event() = default;
@@ -193,7 +198,6 @@ private:
 	}
 };
 
-// Процессор для поворота робота
 class TurnProcessor : public EventProcessor {
 private:
 	EventStore& eventStore;
@@ -203,7 +207,7 @@ public:
 	TurnProcessor(EventStore& store) : eventStore(store), robot(std::make_unique<PureRobot>()) {}
 
 	void process(std::unique_ptr<Event> event) override {
-		if (event->getType() == "TURN_REQUESTED") {
+		if (event->getType() == "TURN") {
 			auto* turnRequest = dynamic_cast<TurnRequested*>(event.get());
 			if (turnRequest) {
 				RobotState state = rebuildState(turnRequest->robotId);
@@ -220,7 +224,6 @@ public:
 
 private:
 	RobotState rebuildState(const std::string& robotId) {
-		// Аналогично MoveProcessor
 		RobotState state;
 		auto events = eventStore.getEvents(robotId);
 
