@@ -6,12 +6,12 @@
 using Result = std::pair<bool, RobotState>;
 
 enum class ErrorCode {
-    SUCCESS,
-    HIT_BARRIER,
-    NO_WATER,
-    NO_SOAP,
-    NO_BRUSH,
-    INVALID_STATE
+	SUCCESS,
+	HIT_BARRIER,
+	NO_WATER,
+	NO_SOAP,
+	NO_BRUSH,
+	INVALID_STATE
 };
 
 class StateMonad {
